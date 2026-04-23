@@ -4,6 +4,10 @@ import { Navbar } from "./components/Navbar";
 import { useState, useEffect, useRef } from "react";
 import { MovieSummary } from "./types";
 import { tmdb } from "./src/lib/tmdb";
+import MovieCard from "./components/MovieCard";
+import UpcomingSection from "./components/UpcomingSection";
+import PopularSection from "./components/PopularSection";
+import TopRatedSection from "./components/TopRatedSection";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -102,7 +106,7 @@ export default function Home() {
   };
 
   return (
-    <div className="w-full flex flex-col min-h-screen mx-auto bg-white">
+    <div className="w-[1440px] flex flex-col min-h-screen mx-auto bg-white">
       <Navbar />
 
       {/* TRENDING HERO SECTION */}
@@ -169,119 +173,23 @@ export default function Home() {
         </div>
       )}
 
-      {/* UPCOMING SECTION */}
-      <div className="px-20 py-16">
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-2xl font-bold uppercase italic">Upcoming</h2>
-          <button className="flex items-center gap-2 text-sm font-semibold hover:underline">
-            See more <span>→</span>
-          </button>
-        </div>
-        {isLoading ? (
-          <MovieGridSkeleton />
-        ) : (
-          <div className="grid grid-cols-5 gap-8">
-            {upcomingMovies.map((movie) => (
-              <div key={movie.id} className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-2xl aspect-[2/3]">
-                  <img
-                    src={getImageUrl(movie.poster_path, "w500")}
-                    alt={movie.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <div className="mt-4 px-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <img src="/star.svg" alt="star" className="w-4 h-4" />
-                    <span className="text-sm font-medium">
-                      {movie.vote_average.toFixed(1)}/10
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-lg line-clamp-1">
-                    {movie.title}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <UpcomingSection
+        upcomingMovies={upcomingMovies}
+        isLoading={isLoading}
+        getImageUrl={getImageUrl}
+      />
 
-      {/* POPULAR SECTION */}
-      <div className="px-20 ">
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-2xl font-bold uppercase italic">Popular</h2>
-          <button className="flex items-center gap-2 text-sm font-semibold hover:underline">
-            See more <span>→</span>
-          </button>
-        </div>
-        {isLoading ? (
-          <MovieGridSkeleton />
-        ) : (
-          <div className="grid grid-cols-5 gap-8">
-            {popularMovies.map((movie) => (
-              <div key={movie.id} className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-2xl aspect-[2/3]">
-                  <img
-                    src={getImageUrl(movie.poster_path, "w500")}
-                    alt={movie.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <div className="mt-4 px-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <img src="/star.svg" alt="star" className="w-4 h-4" />
-                    <span className="text-sm font-medium">
-                      {movie.vote_average.toFixed(1)}/10
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-lg line-clamp-1">
-                    {movie.title}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <PopularSection
+        popularMovies={popularMovies}
+        isLoading={isLoading}
+        getImageUrl={getImageUrl}
+      />
 
-      {/* TOP RATED SECTION */}
-      <div className="px-20 py-16">
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-2xl font-bold uppercase italic">Top Rated</h2>
-          <button className="flex items-center gap-2 text-sm font-semibold hover:underline">
-            See more <span>→</span>
-          </button>
-        </div>
-        {isLoading ? (
-          <MovieGridSkeleton />
-        ) : (
-          <div className="grid grid-cols-5 gap-8">
-            {topRatedMovies.map((movie) => (
-              <div key={movie.id} className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-2xl aspect-[2/3]">
-                  <img
-                    src={getImageUrl(movie.poster_path, "w500")}
-                    alt={movie.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                </div>
-                <div className="mt-4 px-1">
-                  <div className="flex items-center gap-2 mb-1">
-                    <img src="/star.svg" alt="star" className="w-4 h-4" />
-                    <span className="text-sm font-medium">
-                      {movie.vote_average.toFixed(1)}/10
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-lg line-clamp-1">
-                    {movie.title}
-                  </h3>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <TopRatedSection
+        topRatedMovies={topRatedMovies}
+        isLoading={isLoading}
+        getImageUrl={getImageUrl}
+      />
 
       <Footer />
     </div>
