@@ -4,10 +4,7 @@ import { Navbar } from "./components/Navbar";
 import { useState, useEffect, useRef } from "react";
 import { MovieSummary } from "./types";
 import { tmdb } from "./src/lib/tmdb";
-import MovieCard from "./components/MovieCard";
-import UpcomingSection from "./components/UpcomingSection";
-import PopularSection from "./components/PopularSection";
-import TopRatedSection from "./components/TopRatedSection";
+import MovieSection from "./components/MovieSection";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -173,24 +170,29 @@ export default function Home() {
         </div>
       )}
 
-      <UpcomingSection
-        upcomingMovies={upcomingMovies}
+      <MovieSection
+        title="Upcoming"
+        movies={upcomingMovies}
         isLoading={isLoading}
         getImageUrl={getImageUrl}
+        categoryPath="upcoming"
       />
 
-      <PopularSection
-        popularMovies={popularMovies}
+      <MovieSection
+        title="Popular"
+        movies={popularMovies}
         isLoading={isLoading}
         getImageUrl={getImageUrl}
+        categoryPath="popular"
       />
 
-      <TopRatedSection
-        topRatedMovies={topRatedMovies}
+      <MovieSection
+        title="Top Rated"
+        movies={topRatedMovies}
         isLoading={isLoading}
         getImageUrl={getImageUrl}
+        categoryPath="top-rated"
       />
-
       <Footer />
     </div>
   );
