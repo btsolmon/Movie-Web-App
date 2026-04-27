@@ -5,6 +5,8 @@ import { useState, useEffect, useRef } from "react";
 import { MovieSummary } from "./types";
 import { tmdb } from "./src/lib/tmdb";
 import MovieSection from "./components/MovieSection";
+import MovieCard from "./components/MovieCard";
+import { Pagination } from "./components/Pagination";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -18,6 +20,9 @@ export default function Home() {
   const [popularMovies, setPopularMovies] = useState<MovieSummary[]>([]);
   const [topRatedMovies, setTopRatedMovies] = useState<MovieSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [viewCategory, setViewCategory] = useState<string | null>(null);
+  const [categoryMovies, setCategoryMovies] = useState<MovieSummary[]>([]);
+  const [page, setPage] = useState(1);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -102,8 +107,59 @@ export default function Home() {
     scrollToMovie(nextIndex);
   };
 
+  const fetchCategory = async (type: string, pageNum: number) => {
+    setIsLoading(true);
+    try {
+      const res = await tmdb.get(`/movie/${type}?page=${pageNum}`);
+      setCategoryMovies(res.data.results);
+      setViewCategory(type);
+      setPage(pageNum);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (viewCategory) {
+    return (
+      <div className="w-[1440px] mx-auto bg-white min-h-screen">
+        <Navbar />
+        <main className="p-10">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold capitalize">
+              {viewCategory} Movies
+            </h2>
+            <button
+              onClick={() => setViewCategory(null)}
+              className=" gap-2 text-sm font-semibold hover:underline cursor-pointer"
+            >
+              ← Back
+            </button>
+          </div>
+
+          <div className="grid grid-cols-5 gap-8">
+            {categoryMovies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                getImageUrl={getImageUrl}
+              />
+            ))}
+          </div>
+          <Pagination
+            currentPage={page}
+            onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
+          />
+          {/* Pagination хэсгийг энд нэмж болно */}
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
-    <div className="w-[1440px] flex flex-col min-h-screen mx-auto bg-white">
+    <div className="max-w-[1440px] w-full flex flex-col min-h-screen mx-auto bg-white">
       <Navbar />
 
       {/* TRENDING HERO SECTION */}
@@ -176,6 +232,7 @@ export default function Home() {
         isLoading={isLoading}
         getImageUrl={getImageUrl}
         categoryPath="upcoming"
+        onSeeMore={() => fetchCategory("upcoming", 1)}
       />
 
       <MovieSection
@@ -184,6 +241,7 @@ export default function Home() {
         isLoading={isLoading}
         getImageUrl={getImageUrl}
         categoryPath="popular"
+        onSeeMore={() => fetchCategory("popular", 1)}
       />
 
       <MovieSection
@@ -192,7 +250,9 @@ export default function Home() {
         isLoading={isLoading}
         getImageUrl={getImageUrl}
         categoryPath="top-rated"
+        onSeeMore={() => fetchCategory("top_rated", 1)}
       />
+
       <Footer />
     </div>
   );

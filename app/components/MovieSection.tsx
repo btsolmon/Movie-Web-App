@@ -8,6 +8,7 @@ interface MovieSectionProps {
   isLoading: boolean;
   getImageUrl: (path: string, size: string) => string;
   categoryPath: string;
+  onSeeMore?: () => void;
 }
 
 const MovieGridSkeleton = () => (
@@ -28,23 +29,25 @@ const MovieSection = ({
   isLoading,
   getImageUrl,
   categoryPath,
+  onSeeMore,
 }: MovieSectionProps) => {
   return (
     <section className="px-20 py-16">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-bold uppercase italic">{title}</h2>
-        <Link
+        <button
+          onClick={onSeeMore}
           href={`/movie/category/${categoryPath}`}
           className="flex items-center gap-2 text-sm font-semibold hover:underline cursor-pointer"
         >
           See more <span>→</span>
-        </Link>
+        </button>
       </div>
 
       {isLoading ? (
         <MovieGridSkeleton />
       ) : (
-        <div className="grid grid-cols-5 gap-8">
+        <div className="grid grid-cols-5 gap-8 ">
           {movies.slice(0, 10).map((movie) => (
             <MovieCard key={movie.id} movie={movie} getImageUrl={getImageUrl} />
           ))}
