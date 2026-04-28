@@ -4,7 +4,11 @@ import { useParams } from "next/navigation";
 import { tmdb } from "@/app/src/lib/tmdb";
 import { Navbar } from "@/app/components/Navbar";
 import { Footer } from "@/app/components/Footer";
+import MovieSection from "@/app/components/MovieSection";
+import { MovieSummary } from "@/app/types";
 import MovieCard from "@/app/components/MovieCard";
+import { Pagination } from "@/app/components/Pagination";
+import { VidkingPlayer } from "@/app/components/VidkingPlayer";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -16,34 +20,65 @@ export default function MovieDetail() {
   const { id } = useParams();
   const [movie, setMovie] = useState<any>(null);
   const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [viewCategory, setViewCategory] = useState<string | null>(null);
+  const [categoryMovies, setCategoryMovies] = useState<MovieSummary[]>([]);
+  const [page, setPage] = useState(1);
+  const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
+
+  const fetchData = async () => {
+    try {
+      setIsLoading(true);
+      const [movieRes, recommendRes] = await Promise.all([
+        tmdb.get(`/movie/${id}?append_to_response=credits`),
+        tmdb.get(`/movie/${id}/recommendations`),
+      ]);
+
+      setMovie(movieRes.data);
+      setRecommendations(recommendRes.data.results.slice(0, 5));
+    } catch (err) {
+      console.error("Дата татахад алдаа гарлаа:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const fetchCategory = async (category: string, newPage: number) => {
+    try {
+      setIsLoading(true);
+      setViewCategory(category);
+      setPage(newPage);
+
+      const res = await tmdb.get(`/movie/${id}/recommendations`, {
+        params: { page: newPage },
+      });
+
+      setCategoryMovies(res.data.results);
+      window.scrollTo(0, 0);
+    } catch (err) {
+      console.error("Ангилал татахад алдаа гарлаа:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchMovieData = async () => {
-      try {
-        setLoading(true);
-        // Киноны мэдээлэл, жүжигчид (credits) болон санал болгох кинонуудыг нэг дор татах
-        const [movieRes, recommendRes] = await Promise.all([
-          tmdb.get(`/movie/${id}?append_to_response=credits`),
-          tmdb.get(`/movie/${id}/recommendations`),
-        ]);
+    if (playingMovieId) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [playingMovieId]);
 
-        setMovie(movieRes.data);
-        // Эхний 5 оновчтой киног авах
-        setRecommendations(recommendRes.data.results.slice(0, 5));
-      } catch (err) {
-        console.error("Дата татахад алдаа гарлаа:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (id) fetchMovieData();
-    // Хуудасны дээш скролл хийх (ID солигдох үед)
+  useEffect(() => {
+    if (id) {
+      fetchData();
+      setViewCategory(null);
+    }
     window.scrollTo(0, 0);
   }, [id]);
 
-  if (loading)
+  if (isLoading && !movie)
     return (
       <div className="h-screen w-full flex items-center justify-center bg-white">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
@@ -52,7 +87,6 @@ export default function MovieDetail() {
 
   if (!movie) return <div className="p-20 text-center">Кино олдсонгүй.</div>;
 
-  // Director, Writers, Stars-ийг шүүж авах
   const director = movie.credits?.crew?.find(
     (c: any) => c.job === "Director",
   )?.name;
@@ -66,12 +100,47 @@ export default function MovieDetail() {
     .map((s: any) => s.name)
     .join(", ");
 
+  if (viewCategory) {
+    return (
+      <div className="max-w-[1440px] mx-auto bg-white min-h-screen">
+        <Navbar />
+        <main className="p-10">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold capitalize">
+              {viewCategory} Movies
+            </h2>
+            <button
+              onClick={() => setViewCategory(null)}
+              className=" gap-2 text-sm font-semibold hover:underline cursor-pointer"
+            >
+              ← Back
+            </button>
+          </div>
+
+          <div className="grid grid-cols-5 gap-8">
+            {categoryMovies.map((movie) => (
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                getImageUrl={getImageUrl}
+              />
+            ))}
+          </div>
+          <Pagination
+            currentPage={page}
+            onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
+          />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white min-h-screen text-black">
       <Navbar />
 
       <main className="max-w-[1200px] mx-auto pt-10 px-6">
-        {/* Title and Rating Section */}
         <div className="flex justify-between items-end mb-8">
           <div>
             <h1 className="text-4xl font-semibold mb-2 ">{movie.title}</h1>
@@ -123,12 +192,14 @@ export default function MovieDetail() {
             />
             <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all" />
 
-            {/* Play Trailer Button */}
-            <button className="absolute bottom-8 left-8 flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95">
+            <button
+              onClick={() => setPlayingMovieId(movie.id)}
+              className="absolute bottom-8 left-8 flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95"
+            >
               <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
                 <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
               </div>
-              <span className="font-bold text-sm">Play trailer</span>
+              <span>Watch Now</span>
             </button>
           </div>
         </div>
@@ -175,32 +246,32 @@ export default function MovieDetail() {
         </div>
 
         {/* Recommendations Section */}
-        <section className="pb-24">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-semibold tracking-tight">
-              More like this
-            </h2>
-            <button className="flex items-center gap-1 text-sm font-bold hover:bg-gray-100 px-3 py-1 rounded-lg transition-all">
-              See more <span className="text-lg">→</span>
-            </button>
-          </div>
-
-          <div className="grid grid-cols-5 gap-8">
-            {recommendations.length > 0 ? (
-              recommendations.map((m: any) => (
-                <div
-                  key={m.id}
-                  className="bg-gray-100 rounded-2xl hover:bg-gray-200 transition-colors"
-                >
-                  <MovieCard movie={m} getImageUrl={getImageUrl} />
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500 italic">No recommendations found.</p>
-            )}
-          </div>
-        </section>
+        {recommendations.length > 0 && (
+          <MovieSection
+            title="More Like This"
+            movies={recommendations}
+            isLoading={isLoading}
+            getImageUrl={getImageUrl}
+            categoryPath="recommendations"
+            onSeeMore={() => fetchCategory("recommendations", 1)}
+          />
+        )}
       </main>
+
+      {playingMovieId && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm">
+          <button
+            onClick={() => setPlayingMovieId(null)}
+            className="absolute top-8 right-10 text-white text-5xl hover:text-red-500 transition-colors z-[110]"
+          >
+            ×
+          </button>
+
+          <div className="w-full max-w-6xl p-4">
+            <VidkingPlayer tmdbId={playingMovieId} type="movie" />
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>

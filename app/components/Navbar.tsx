@@ -58,8 +58,8 @@ export const Navbar = () => {
   return (
     <header className="py-[11.5px] border-b border-gray-100 relative bg-white">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center gap-4">
-          <Link href={"/"} className="flex items-center gap-2 ">
+        <div className="flex justify-between items-center gap-4 ">
+          <Link href={"/"} className="flex items-center gap-2 cursor-pounter">
             <img className="w-4 h-4" src="film.svg" />
             <p className=" flex items-center size-4 font-bold italic text-[#4338ca]">
               MovieZ

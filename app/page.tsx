@@ -7,6 +7,7 @@ import { tmdb } from "./src/lib/tmdb";
 import MovieSection from "./components/MovieSection";
 import MovieCard from "./components/MovieCard";
 import { Pagination } from "./components/Pagination";
+import { VidkingPlayer } from "./components/VidkingPlayer";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -23,12 +24,12 @@ export default function Home() {
   const [viewCategory, setViewCategory] = useState<string | null>(null);
   const [categoryMovies, setCategoryMovies] = useState<MovieSummary[]>([]);
   const [page, setPage] = useState(1);
+  const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
 
   const [activeIndex, setActiveIndex] = useState(0);
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Hero хэсгийн ачаалалт
   const HeroSkeleton = () => (
     <div className="w-full h-[800px] bg-gray-200 animate-pulse flex items-center pl-35">
       <div className="flex flex-col gap-4">
@@ -41,7 +42,6 @@ export default function Home() {
     </div>
   );
 
-  // Киноны картын ачаалалт
   const MovieGridSkeleton = () => (
     <div className="grid grid-cols-5 gap-8">
       {[...Array(5)].map((_, i) => (
@@ -73,13 +73,20 @@ export default function Home() {
       } catch (err) {
         console.error("Алдаа гарлаа:", err);
       } finally {
-        setIsLoading(false); // Өгөгдөл ирсний дараа унтраана
+        setIsLoading(false);
       }
     };
     fetchData();
   }, []);
 
-  // Скролл хийх үед индексийг шинэчлэх функц
+  useEffect(() => {
+    if (playingMovieId) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [playingMovieId]);
+
   const handleScroll = () => {
     if (scrollContainerRef.current) {
       const { scrollLeft, clientWidth } = scrollContainerRef.current;
@@ -88,7 +95,6 @@ export default function Home() {
     }
   };
 
-  // Цэг дээр дарах эсвэл дараагийнх руу шилжих үед ашиглах функц
   const scrollToMovie = (index: number) => {
     if (scrollContainerRef.current) {
       const clientWidth = scrollContainerRef.current.clientWidth;
@@ -97,7 +103,6 @@ export default function Home() {
         behavior: "smooth",
       });
 
-      // Индексийг шууд шинэчилнэ
       setActiveIndex(index);
     }
   };
@@ -151,7 +156,6 @@ export default function Home() {
             currentPage={page}
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
           />
-          {/* Pagination хэсгийг энд нэмж болно */}
         </main>
         <Footer />
       </div>
@@ -162,7 +166,6 @@ export default function Home() {
     <div className="max-w-[1440px] w-full flex flex-col min-h-screen mx-auto bg-white">
       <Navbar />
 
-      {/* TRENDING HERO SECTION */}
       {isLoading ? (
         <HeroSkeleton />
       ) : (
@@ -193,15 +196,18 @@ export default function Home() {
                   <p className="text-base text-gray-200 max-w-lg line-clamp-3">
                     {movie.overview}
                   </p>
-                  <button className="w-[145px] h-[40px] bg-gray-200 text-black rounded-md hover:scale-110 transition-transform">
-                    Watch Movie
+                  <button
+                    onClick={() => setPlayingMovieId(movie.id)}
+                    className="w-[145px] flex items-center gap-3 bg-gray-200 text-black px-3 py-2 rounded-md hover:scale-110 transition-transform"
+                  >
+                    <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
+                    <span>Watch Now</span>
                   </button>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* INDICATORS */}
           <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
             {trendingMovies.map((_, index) => (
               <button
@@ -252,6 +258,21 @@ export default function Home() {
         categoryPath="top-rated"
         onSeeMore={() => fetchCategory("top_rated", 1)}
       />
+
+      {playingMovieId && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm">
+          <button
+            onClick={() => setPlayingMovieId(null)}
+            className="absolute top-8 right-10 text-white text-5xl hover:text-red-500 transition-colors z-[110]"
+          >
+            ×
+          </button>
+
+          <div className="w-full max-w-6xl p-4">
+            <VidkingPlayer tmdbId={playingMovieId} type="movie" />
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
