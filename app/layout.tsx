@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
 
 const inter = Inter({
   variable: "--font-inter-mono",
@@ -18,8 +19,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} bg-white`}>
-      <body>{children}</body>
+    <html lang="en" className={`${inter.variable}`}>
+      <body>
+        <ThemeProvider
+          enableSystem={false}
+          defaultTheme="light"
+          attribute="class"
+        >
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

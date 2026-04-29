@@ -8,6 +8,7 @@ import MovieSection from "./components/MovieSection";
 import MovieCard from "./components/MovieCard";
 import { Pagination } from "./components/Pagination";
 import { VidkingPlayer } from "./components/VidkingPlayer";
+import { useTheme } from "next-themes";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -25,6 +26,7 @@ export default function Home() {
   const [categoryMovies, setCategoryMovies] = useState<MovieSummary[]>([]);
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
+  const { theme, setTheme } = useTheme;
 
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -128,9 +130,9 @@ export default function Home() {
 
   if (viewCategory) {
     return (
-      <div className="w-[1440px] mx-auto bg-white min-h-screen">
+      <div className=" mx-auto  min-h-screen">
         <Navbar />
-        <main className="p-10">
+        <main className=" p-10">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold capitalize">
               {viewCategory} Movies
@@ -163,7 +165,7 @@ export default function Home() {
   }
 
   return (
-    <div className="max-w-[1440px] w-full flex flex-col min-h-screen mx-auto bg-white">
+    <div className="w-full flex flex-col min-h-screen mx-auto ">
       <Navbar />
 
       {isLoading ? (
@@ -214,9 +216,7 @@ export default function Home() {
                 key={index}
                 onClick={() => scrollToMovie(index)}
                 className={`h-3 rounded-full transition-all duration-300 ${
-                  activeIndex === index
-                    ? "w-8 bg-white"
-                    : "w-3 bg-white/40 hover:bg-white/60"
+                  activeIndex === index ? "w-8 " : "w-3 /40 hover:/60"
                 }`}
               />
             ))}
@@ -225,7 +225,7 @@ export default function Home() {
             onClick={handleNext}
             className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hover:scale-110 transition-transform active:scale-95"
           >
-            <div className="bg-white/20 p-4 rounded-full backdrop-blur-sm border border-white/10">
+            <div className="/20 p-4 rounded-full backdrop-blur-sm border border-white/10">
               <img src="/chevron-right.svg" alt="next" className="w-10 h-10" />
             </div>
           </button>

@@ -80,7 +80,7 @@ export default function MovieDetail() {
 
   if (isLoading && !movie)
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-white">
+      <div className="h-screen w-full flex items-center justify-center ">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
       </div>
     );
@@ -102,7 +102,7 @@ export default function MovieDetail() {
 
   if (viewCategory) {
     return (
-      <div className="max-w-[1440px] mx-auto bg-white min-h-screen">
+      <div className="max-w-[1440px] mx-auto  min-h-screen">
         <Navbar />
         <main className="p-10">
           <div className="flex justify-between items-center mb-8">
@@ -137,7 +137,7 @@ export default function MovieDetail() {
   }
 
   return (
-    <div className="bg-white min-h-screen text-black">
+    <div className=" min-h-screen text-black">
       <Navbar />
 
       <main className="max-w-[1200px] mx-auto pt-10 px-6">
@@ -194,9 +194,9 @@ export default function MovieDetail() {
 
             <button
               onClick={() => setPlayingMovieId(movie.id)}
-              className="absolute bottom-8 left-8 flex items-center gap-3 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95"
+              className="absolute bottom-8 left-8 flex items-center gap-3 /10 hover:/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95"
             >
-              <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg">
+              <div className="w-10 h-10  rounded-full flex items-center justify-center shadow-lg">
                 <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
               </div>
               <span>Watch Now</span>

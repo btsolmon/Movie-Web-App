@@ -32,7 +32,7 @@ const MovieSection = ({
   onSeeMore,
 }: MovieSectionProps) => {
   return (
-    <section className="px-20 py-16">
+    <section className="px-20 py-16 ">
       <div className="flex justify-between items-center mb-10">
         <h2 className="text-2xl font-semibold uppercase">{title}</h2>
         <button
