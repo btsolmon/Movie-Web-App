@@ -1,4 +1,3 @@
-// components/MovieSection.tsx
 import MovieCard from "./MovieCard";
 import Link from "next/link";
 

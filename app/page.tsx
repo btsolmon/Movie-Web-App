@@ -25,7 +25,7 @@ export default function Home() {
   const [categoryMovies, setCategoryMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
-  const { theme, setTheme } = useTheme;
+  const { theme, setTheme } = useTheme();
 
   const [activeIndex, setActiveIndex] = useState(0);
 

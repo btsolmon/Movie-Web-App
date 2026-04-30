@@ -134,7 +134,7 @@ export default function MovieDetail() {
 
   return (
     <div className=" min-h-screen text-black">
-      <main className="max-w-[1200px] mx-auto pt-10 px-6 ">
+      <main className="max-w-[1200px] mx-auto pt-10 px-6 text-black dark:text-white ">
         <div className="flex justify-between items-end mb-8">
           <div>
             <h1 className="text-4xl font-semibold mb-2 ">{movie.title}</h1>
@@ -216,21 +216,21 @@ export default function MovieDetail() {
         </div>
 
         {/* Credits Table-like Section */}
-        <div className="space-y-5 border-b border-gray-200 py-6 mb-8 ">
+        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6 mb-8 ">
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Director</span>
             <span className="text-sm hover:underline cursor-pointer">
               {director || "N/A"}
             </span>
           </div>
-          <hr className="border-gray-200" />
+          <hr className="border-gray-200 dark:border-gray-600" />
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Writers</span>
             <span className="text-sm hover:underline cursor-pointer">
               {writers || "N/A"}
             </span>
           </div>
-          <hr className="border-gray-200" />
+          <hr className="border-gray-200 dark:border-gray-600" />
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Stars</span>
             <span className=" text-sm hover:underline cursor-pointer">
