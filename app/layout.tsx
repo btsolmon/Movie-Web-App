@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
+import { Header } from "./layout/Header";
+import { Footer } from "./layout/Footer";
 
 const inter = Inter({
-  variable: "--font-inter-mono",
+  variable: "--font-inter-sans",
   subsets: ["latin"],
 });
 
@@ -19,14 +21,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable}`}>
+    <html lang="en" className={`${inter.variable} bg-white`}>
       <body>
         <ThemeProvider
           enableSystem={false}
           defaultTheme="light"
           attribute="class"
         >
+          <Header />
           {children}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>

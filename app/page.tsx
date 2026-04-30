@@ -1,9 +1,8 @@
 "use client";
-import { Footer } from "./components/Footer";
-import { Navbar } from "./components/Navbar";
+
 import { useState, useEffect, useRef } from "react";
-import { MovieSummary } from "./types";
-import { tmdb } from "./src/lib/tmdb";
+import { Movie } from "@/types";
+import { tmdb } from "@/lib/tmdb";
 import MovieSection from "./components/MovieSection";
 import MovieCard from "./components/MovieCard";
 import { Pagination } from "./components/Pagination";
@@ -17,13 +16,13 @@ const getImageUrl = (path: string | null, size: string = "original") => {
 };
 
 export default function Home() {
-  const [trendingMovies, setTrendingMovies] = useState<MovieSummary[]>([]);
-  const [upcomingMovies, setUpcomingMovies] = useState<MovieSummary[]>([]);
-  const [popularMovies, setPopularMovies] = useState<MovieSummary[]>([]);
-  const [topRatedMovies, setTopRatedMovies] = useState<MovieSummary[]>([]);
+  const [trendingMovies, setTrendingMovies] = useState<Movie[]>([]);
+  const [upcomingMovies, setUpcomingMovies] = useState<Movie[]>([]);
+  const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
+  const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewCategory, setViewCategory] = useState<string | null>(null);
-  const [categoryMovies, setCategoryMovies] = useState<MovieSummary[]>([]);
+  const [categoryMovies, setCategoryMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
   const { theme, setTheme } = useTheme;
@@ -131,7 +130,6 @@ export default function Home() {
   if (viewCategory) {
     return (
       <div className=" mx-auto  min-h-screen">
-        <Navbar />
         <main className=" p-10">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold capitalize">
@@ -159,15 +157,12 @@ export default function Home() {
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
           />
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className="w-full flex flex-col min-h-screen mx-auto ">
-      <Navbar />
-
       {isLoading ? (
         <HeroSkeleton />
       ) : (
@@ -273,8 +268,6 @@ export default function Home() {
           </div>
         </div>
       )}
-
-      <Footer />
     </div>
   );
 }

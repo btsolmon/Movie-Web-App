@@ -1,4 +1,4 @@
-import Link from "next/link"; // Next.js-ийн Link-ийг импортлох
+import Link from "next/link";
 
 interface MovieCardProps {
   movie: {
@@ -12,7 +12,7 @@ interface MovieCardProps {
 const MovieCard = ({ movie, getImageUrl }: MovieCardProps) => {
   return (
     <Link href={`/movie/${movie.id}`} className="group cursor-pointer">
-      <div className="relative overflow-hidden rounded-xl aspect-[2/3]">
+      <div className="relative overflow-hidden rounded-xl aspect-[2/3] ">
         <img
           src={getImageUrl(movie.poster_path, "w500")}
           alt={movie.title}

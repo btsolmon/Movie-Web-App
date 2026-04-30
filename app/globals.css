@@ -10,23 +10,28 @@
   }
 }
 
-:root {
-  --background: white;
-  --foreground: black;
-}
-
-[data-theme="dark"] {
-  --background: black;
-  --foreground: white;
-}
+@custom-variant dark (&:where(.dark, .dark *));
 
 body {
   font-family: "Inter", sans-serif;
-  background: var(---background);
-  color: var(---foreground);
+  background-color: #fff;
+  color: #18181b;
+}
+.dark body {
+  background-color: #09090b;
+  color: #fafafa;
 }
 
 .container {
-  max-width: 1280px;
   margin: 0 auto;
+  max-width: 1280px;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }

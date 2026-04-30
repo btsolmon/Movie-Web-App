@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { tmdb } from "@/app/src/lib/tmdb";
+import { tmdb } from "@/lib/tmdb";
 
 // Киноны төрлийг тодорхойлох (TypeScript ашиглаж байгаа бол)
 interface Movie {

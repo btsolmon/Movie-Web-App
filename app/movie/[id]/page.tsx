@@ -1,11 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { tmdb } from "@/app/src/lib/tmdb";
-import { Navbar } from "@/app/components/Navbar";
-import { Footer } from "@/app/components/Footer";
+import { tmdb } from "@/lib/tmdb";
 import MovieSection from "@/app/components/MovieSection";
-import { MovieSummary } from "@/app/types";
+import { Movie } from "@/types";
 import MovieCard from "@/app/components/MovieCard";
 import { Pagination } from "@/app/components/Pagination";
 import { VidkingPlayer } from "@/app/components/VidkingPlayer";
@@ -22,7 +20,7 @@ export default function MovieDetail() {
   const [recommendations, setRecommendations] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [viewCategory, setViewCategory] = useState<string | null>(null);
-  const [categoryMovies, setCategoryMovies] = useState<MovieSummary[]>([]);
+  const [categoryMovies, setCategoryMovies] = useState<Movie[]>([]);
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
 
@@ -102,9 +100,8 @@ export default function MovieDetail() {
 
   if (viewCategory) {
     return (
-      <div className="max-w-[1440px] mx-auto  min-h-screen">
-        <Navbar />
-        <main className="p-10">
+      <div className="max-w-[1440px] mx-auto  min-h-screen ">
+        <main className="p-10 ">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold capitalize">
               {viewCategory} Movies
@@ -131,16 +128,13 @@ export default function MovieDetail() {
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
           />
         </main>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div className=" min-h-screen text-black">
-      <Navbar />
-
-      <main className="max-w-[1200px] mx-auto pt-10 px-6">
+      <main className="max-w-[1200px] mx-auto pt-10 px-6 ">
         <div className="flex justify-between items-end mb-8">
           <div>
             <h1 className="text-4xl font-semibold mb-2 ">{movie.title}</h1>
@@ -272,8 +266,6 @@ export default function MovieDetail() {
           </div>
         </div>
       )}
-
-      <Footer />
     </div>
   );
 }
