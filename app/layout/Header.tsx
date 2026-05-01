@@ -28,17 +28,17 @@ export const Header = () => {
   }, []);
 
   const renderThemeChanger = () => {
-    if (!mounted) return <div className="p-5"></div>;
+    if (!mounted) return <div className="w-10 h-10"></div>;
 
     return (
       <button
         onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-        className="p-2.5 border border-[#E4E4E7] dark:border-gray-600 rounded-[10px] shadow-xs cursor-pointer hover:opacity-80 bg-white dark:bg-black"
+        className="w-10 h-10 flex items-center justify-center border border-gray-200 dark:border-gray-600 rounded-lg shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors bg-white dark:bg-black"
       >
         {theme === "light" ? (
-          <img className="w-3 h-3" src="moon.svg" alt="dark mode" />
+          <img className="w-4 h-4" src="/moon.svg" alt="dark mode" />
         ) : (
-          <img className="w-4 h-4" src="sun.svg" alt="light mode" />
+          <img className="w-4 h-4" src="/sun.svg" alt="light mode" />
         )}
       </button>
     );
@@ -46,7 +46,7 @@ export const Header = () => {
 
   return (
     <header className="py-[11.5px] relative z-50">
-      <div className="container">
+      <div className="px-20">
         <div className="flex justify-between items-center">
           <Link
             href={"/"}

@@ -32,10 +32,21 @@ export const GenreSelector = () => {
     <div ref={dropdownRef}>
       <button
         onClick={() => setIsVisible(!isVisible)}
-        className="flex gap-2 items-center text-sm text-[#181818] px-4 py-2 border border-[#E4E4E7] dark:border-gray-600 rounded-[10px] shadow-xs cursor-pointer hover:opacity-80 dark:text-white "
+        className="flex gap-2 items-center text-sm text-[#181818] px-4 h-9 border border-[#E4E4E7] dark:border-gray-600 rounded-[10px] shadow-xs cursor-pointer hover:opacity-80 dark:text-white "
       >
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M4 6L8 10L12 6" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4 6L8 10L12 6"
+            stroke="currentColor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
         Genre
       </button>

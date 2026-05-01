@@ -169,7 +169,6 @@ export default function MovieDetail() {
           </div>
         </div>
 
-        {/* Media Grid: Poster (4 cols) and Backdrop (8 cols) */}
         <div className="grid grid-cols-12 gap-5 mb-10 h-[500px]">
           <div className="col-span-4 rounded-sm overflow-hidden shadow-2xl">
             <img
@@ -198,7 +197,6 @@ export default function MovieDetail() {
           </div>
         </div>
 
-        {/* Genres and Summary */}
         <div>
           <div className="flex flex-wrap gap-2 mb-6">
             {movie.genres?.map((g: any) => (
@@ -210,12 +208,11 @@ export default function MovieDetail() {
               </span>
             ))}
           </div>
-          <p className="text-lg leading-relaxed text-gray-800 max-w-4xl">
+          <p className="text-lg leading-relaxed text-gray-800 dark:text-white max-w-4xl">
             {movie.overview}
           </p>
         </div>
 
-        {/* Credits Table-like Section */}
         <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6 mb-8 ">
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Director</span>
@@ -239,7 +236,6 @@ export default function MovieDetail() {
           </div>
         </div>
 
-        {/* Recommendations Section */}
         {recommendations.length > 0 && (
           <MovieSection
             title="More Like This"

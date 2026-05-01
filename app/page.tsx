@@ -26,9 +26,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
   const { theme, setTheme } = useTheme();
-
   const [activeIndex, setActiveIndex] = useState(0);
-
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const HeroSkeleton = () => (
@@ -56,6 +54,16 @@ export default function Home() {
   );
 
   useEffect(() => {
+    if (trendingMovies.length === 0 || viewCategory) return;
+
+    const interval = setInterval(() => {
+      handleNext();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [activeIndex, trendingMovies, viewCategory]);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -67,7 +75,7 @@ export default function Home() {
             tmdb.get("/movie/top_rated?language=en-US&page=1"),
           ]);
 
-        setTrendingMovies(trendingRes.data.results.slice(0, 3));
+        setTrendingMovies(trendingRes.data.results.slice(0, 10));
         setUpcomingMovies(upcomingRes.data.results.slice(0, 10));
         setPopularMovies(popularRes.data.results.slice(0, 10));
         setTopRatedMovies(topRatedRes.data.results.slice(0, 10));
@@ -109,8 +117,22 @@ export default function Home() {
   };
 
   const handleNext = () => {
-    const nextIndex = (activeIndex + 1) % trendingMovies.length;
-    scrollToMovie(nextIndex);
+    if (!scrollContainerRef.current) return;
+
+    const container = scrollContainerRef.current;
+    const isLastSlide = activeIndex === trendingMovies.length - 1;
+
+    if (isLastSlide) {
+      container.style.scrollBehavior = "auto";
+      container.scrollLeft = 0;
+      setActiveIndex(0);
+      setTimeout(() => {
+        container.style.scrollBehavior = "smooth";
+      }, 50);
+    } else {
+      const nextIndex = activeIndex + 1;
+      scrollToMovie(nextIndex);
+    }
   };
 
   const fetchCategory = async (type: string, pageNum: number) => {
@@ -132,9 +154,7 @@ export default function Home() {
       <div className=" mx-auto  min-h-screen">
         <main className=" p-10">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold capitalize">
-              {viewCategory} Movies
-            </h2>
+            <h2 className="text-3xl font-bold capitalize">{viewCategory}</h2>
             <button
               onClick={() => setViewCategory(null)}
               className=" gap-2 text-sm font-semibold hover:underline cursor-pointer"
@@ -205,14 +225,17 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex gap-3 items-center">
             {trendingMovies.map((_, index) => (
               <button
                 key={index}
                 onClick={() => scrollToMovie(index)}
-                className={`h-3 rounded-full transition-all duration-300 ${
-                  activeIndex === index ? "w-8 " : "w-3 /40 hover:/60"
+                className={`h-3 rounded-full transition-all duration-300 shadow-lg ${
+                  activeIndex === index
+                    ? "w-8 bg-white"
+                    : "w-3 bg-white/30 hover:bg-white/60"
                 }`}
+                aria-label={`Go to slide ${index + 1}`}
               />
             ))}
           </div>
