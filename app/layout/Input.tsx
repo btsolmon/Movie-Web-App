@@ -2,13 +2,15 @@
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useAutocomplete } from "@/app/hooks/useAutocomplete";
+import { useRouter } from "next/navigation";
 
-export const SearchInput = () => {
+export const Input = () => {
   const [search, setSearch] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const movies = useAutocomplete(debouncedSearch);
 
@@ -19,7 +21,7 @@ export const SearchInput = () => {
 
     const timer = setTimeout(() => {
       setDebouncedSearch(search);
-    }, 100);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, [search]);
@@ -43,6 +45,13 @@ export const SearchInput = () => {
     };
   }, []);
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && search.trim()) {
+      setIsVisible(false);
+      router.push(`/search?q=${encodeURIComponent(search)}`);
+    }
+  };
+
   return (
     <div className="relative flex-1 max-w-[400px]" ref={searchRef}>
       <div className="flex items-center h-9 gap-2 border rounded-lg border-gray-300 dark:border-gray-600 px-3 bg-gray-50 dark:bg-black focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
@@ -55,6 +64,7 @@ export const SearchInput = () => {
           className="h-full w-full outline-none text-sm bg-transparent dark:text-white"
           placeholder="Search.."
           value={search}
+          onKeyDown={handleKeyDown}
           onChange={(e) => {
             setSearch(e.target.value);
             setIsVisible(true);
@@ -65,8 +75,8 @@ export const SearchInput = () => {
       </div>
 
       {isVisible && debouncedSearch && !isLoading && (
-        <div className="absolute top-full left-0 right-0 mt-2 border border-gray-200 dark:border-gray-600 shadow-2xl rounded-lg overflow-hidden z-[60] bg-white dark:bg-black min-w-[577px]">
-          {movies.length > 0 ? (
+      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 border border-gray-200 dark:border-gray-600 shadow-2xl rounded-lg overflow-hidden z-[60] bg-white dark:bg-black w-[95vw] max-w-[577px]">
+          {movies?.length > 0 ? (
             <>
               {movies.map((movie) => (
                 <Link
@@ -106,11 +116,11 @@ export const SearchInput = () => {
                 </Link>
               ))}
               <Link
-                href={`/search?q=${debouncedSearch}`}
-                className="block text-center py-2 text-sm hover:bg-indigo-50 dark:hover:bg-zinc-900 dark:text-white"
+                href={`/search?q=${encodeURIComponent(debouncedSearch)}`}
+                className="block text-center py-3 text-sm font-semibold border-t border-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-zinc-900 dark:text-white"
                 onClick={() => setIsVisible(false)}
               >
-                See all results for "{search}"
+                See all results for "{debouncedSearch}"
               </Link>
             </>
           ) : (

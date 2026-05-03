@@ -2,7 +2,7 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { GenreSelector } from "@/app/layout/GenreSelector";
-import { SearchInput } from "@/app/layout/SearchInput";
+import { Input } from "@/app/layout/Input";
 import { useState, useEffect, useRef } from "react";
 
 export const Header = () => {
@@ -64,7 +64,7 @@ export const Header = () => {
           </Link>
           <div className="flex gap-3">
             <GenreSelector />
-            <SearchInput />
+            <Input />
           </div>
           <div>{renderThemeChanger()}</div>
         </div>

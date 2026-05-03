@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { tmdb } from "@/lib/tmdb";
 
-// Киноны төрлийг тодорхойлох (TypeScript ашиглаж байгаа бол)
 interface Movie {
   id: number;
   title: string;
