@@ -7,6 +7,7 @@ import { Movie } from "@/types";
 import MovieCard from "@/app/components/MovieCard";
 import { Pagination } from "@/app/components/Pagination";
 import { VidkingPlayer } from "@/app/components/VidkingPlayer";
+import MovieDetailSkeleton from "@/app/components/MovieDetailSkeleton";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -24,6 +25,22 @@ export default function MovieDetail() {
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
 
+  useEffect(() => {
+    if (id) {
+      fetchData();
+      setViewCategory(null);
+    }
+    window.scrollTo(0, 0);
+  }, [id]);
+
+  useEffect(() => {
+    if (playingMovieId) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [playingMovieId]);
+
   const fetchData = async () => {
     try {
       setIsLoading(true);
@@ -35,7 +52,7 @@ export default function MovieDetail() {
       setMovie(movieRes.data);
       setRecommendations(recommendRes.data.results.slice(0, 5));
     } catch (err) {
-      console.error("Дата татахад алдаа гарлаа:", err);
+      console.error("Failed to fetch data.", err);
     } finally {
       setIsLoading(false);
     }
@@ -51,61 +68,29 @@ export default function MovieDetail() {
         params: { page: newPage },
       });
 
-      setCategoryMovies(res.data.results);
+      setCategoryMovies(res.data.results.slice(0, 10));
       window.scrollTo(0, 0);
     } catch (err) {
-      console.error("Ангилал татахад алдаа гарлаа:", err);
+      console.error("Failed to fetch category.", err);
     } finally {
       setIsLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (playingMovieId) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-  }, [playingMovieId]);
+  if (isLoading && !movie) {
+    return <MovieDetailSkeleton />;
+  }
 
-  useEffect(() => {
-    if (id) {
-      fetchData();
-      setViewCategory(null);
-    }
-    window.scrollTo(0, 0);
-  }, [id]);
-
-  if (isLoading && !movie)
-    return (
-      <div className="h-screen w-full flex items-center justify-center ">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
-      </div>
-    );
-
-  if (!movie) return <div className="p-20 text-center">Кино олдсонгүй.</div>;
-
-  const director = movie.credits?.crew?.find(
-    (c: any) => c.job === "Director",
-  )?.name;
-  const writers = movie.credits?.crew
-    ?.filter((c: any) => c.job === "Writer" || c.job === "Screenplay")
-    ?.map((w: any) => w.name)
-    .slice(0, 3)
-    .join(", ");
-  const stars = movie.credits?.cast
-    ?.slice(0, 3)
-    .map((s: any) => s.name)
-    .join(", ");
+  if (!movie && !isLoading) {
+    return <div className="p-20 text-center">Movie not found.</div>;
+  }
 
   if (viewCategory) {
     return (
       <div className="max-w-[1440px] mx-auto  min-h-screen ">
         <main className="p-10 ">
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold capitalize">
-              {viewCategory} Movies
-            </h2>
+            <h2 className="text-3xl font-bold capitalize">More like this</h2>
             <button
               onClick={() => setViewCategory(null)}
               className=" gap-2 text-sm font-semibold hover:underline cursor-pointer"
@@ -131,6 +116,19 @@ export default function MovieDetail() {
       </div>
     );
   }
+
+  const director = movie.credits?.crew?.find(
+    (c: any) => c.job === "Director",
+  )?.name;
+  const writers = movie.credits?.crew
+    ?.filter((c: any) => c.job === "Writer" || c.job === "Screenplay")
+    ?.map((w: any) => w.name)
+    .slice(0, 3)
+    .join(", ");
+  const stars = movie.credits?.cast
+    ?.slice(0, 3)
+    .map((s: any) => s.name)
+    .join(", ");
 
   return (
     <div className=" min-h-screen text-black">
@@ -213,7 +211,7 @@ export default function MovieDetail() {
           </p>
         </div>
 
-        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6 mb-8 ">
+        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6">
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Director</span>
             <span className="text-sm hover:underline cursor-pointer">
@@ -238,7 +236,7 @@ export default function MovieDetail() {
 
         {recommendations.length > 0 && (
           <MovieSection
-            title="More Like This"
+            title="More like this"
             movies={recommendations}
             isLoading={isLoading}
             getImageUrl={getImageUrl}

@@ -57,7 +57,7 @@ export const Header = () => {
             }}
             className="flex items-center gap-2 cursor-pointer"
           >
-            <img className="w-4 h-4" src="film.svg" alt="logo" />
+            <img className="w-4 h-4" src="/film.svg" alt="logo" />
             <p className="flex items-center font-bold italic text-[#4338ca] text-lg">
               MovieZ
             </p>

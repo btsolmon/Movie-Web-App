@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { useAutocomplete } from "@/app/hooks/useAutocomplete";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 export const Input = () => {
   const [search, setSearch] = useState("");
@@ -13,6 +14,13 @@ export const Input = () => {
   const router = useRouter();
 
   const movies = useAutocomplete(debouncedSearch);
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setSearch("");
+    setIsVisible(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (search !== debouncedSearch) {
@@ -49,15 +57,17 @@ export const Input = () => {
     if (e.key === "Enter" && search.trim()) {
       setIsVisible(false);
       router.push(`/search?q=${encodeURIComponent(search)}`);
+      setSearch("");
+      setIsVisible(false);
     }
   };
 
   return (
-    <div className="relative flex-1 max-w-[400px]" ref={searchRef}>
-      <div className="flex items-center h-9 gap-2 border rounded-lg border-gray-300 dark:border-gray-600 px-3 bg-gray-50 dark:bg-black focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
+    <div className="relative flex-1 " ref={searchRef}>
+      <div className="flex items-center w-[379px] h-9 gap-2 border rounded-lg border-gray-300 dark:border-gray-600 px-3 bg-gray-50 dark:bg-black focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
         <img
           className="w-4 h-4 opacity-50 dark:invert"
-          src="magnifying-glass.svg"
+          src="/magnifying-glass.svg"
           alt="search"
         />
         <input
@@ -75,7 +85,7 @@ export const Input = () => {
       </div>
 
       {isVisible && debouncedSearch && !isLoading && (
-      <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 border border-gray-200 dark:border-gray-600 shadow-2xl rounded-lg overflow-hidden z-[60] bg-white dark:bg-black w-[95vw] max-w-[577px]">
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 border border-gray-200 dark:border-gray-600 shadow-2xl rounded-lg overflow-hidden z-[60] bg-white dark:bg-black w-[95vw] max-w-[577px]">
           {movies?.length > 0 ? (
             <>
               {movies.map((movie) => (
@@ -118,7 +128,10 @@ export const Input = () => {
               <Link
                 href={`/search?q=${encodeURIComponent(debouncedSearch)}`}
                 className="block text-center py-3 text-sm font-semibold border-t border-gray-100 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-zinc-900 dark:text-white"
-                onClick={() => setIsVisible(false)}
+                onClick={() => {
+                  setSearch("");
+                  setIsVisible(false);
+                }}
               >
                 See all results for "{debouncedSearch}"
               </Link>

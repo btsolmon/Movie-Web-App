@@ -36,7 +36,7 @@ function GenresContent() {
           sort_by: "popularity.desc",
         },
       });
-      setMovies(res.data.results);
+      setMovies(res.data.results.slice(0, 8));
       setTotalResults(res.data.total_results);
       setPage(p);
     } catch (err) {
@@ -68,7 +68,7 @@ function GenresContent() {
 
   return (
     <div className="max-w-[1200px] mx-auto py-10 px-6 min-h-screen">
-      <h1 className="text-3xl font-bold mb-2">Search filter</h1>
+      <h1 className="text-3xl font-bold mb-8">Search filter</h1>
 
       <div className="flex flex-col lg:flex-row gap-10">
         <div className="w-full lg:w-64 flex-shrink-0">

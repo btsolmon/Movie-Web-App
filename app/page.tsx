@@ -80,7 +80,7 @@ export default function Home() {
         setPopularMovies(popularRes.data.results.slice(0, 10));
         setTopRatedMovies(topRatedRes.data.results.slice(0, 10));
       } catch (err) {
-        console.error("Алдаа гарлаа:", err);
+        console.error("An error has occured", err);
       } finally {
         setIsLoading(false);
       }
@@ -139,7 +139,7 @@ export default function Home() {
     setIsLoading(true);
     try {
       const res = await tmdb.get(`/movie/${type}?page=${pageNum}`);
-      setCategoryMovies(res.data.results);
+      setCategoryMovies(res.data.results.slice(0, 10));
       setViewCategory(type);
       setPage(pageNum);
     } catch (err) {
@@ -151,7 +151,7 @@ export default function Home() {
 
   if (viewCategory) {
     return (
-      <div className=" mx-auto  min-h-screen">
+      <div className=" w-[1440px] mx-auto  min-h-screen">
         <main className=" p-10">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold capitalize">{viewCategory}</h2>
@@ -182,7 +182,7 @@ export default function Home() {
   }
 
   return (
-    <div className="w-full flex flex-col min-h-screen mx-auto ">
+    <div className="w-[1440px] flex flex-col min-h-screen mx-auto ">
       {isLoading ? (
         <HeroSkeleton />
       ) : (

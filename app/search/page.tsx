@@ -48,12 +48,12 @@ function SearchContent() {
         });
       }
 
-      setResults(res.data.results);
+      setResults(res.data.results.slice(0, 8));
       setTotalResults(res.data.total_results);
       setPage(newPage);
       window.scrollTo(0, 0);
     } catch (err) {
-      console.error("Дата татахад алдаа гарлаа:", err);
+      console.error("Failed to fetch data.", err);
     } finally {
       setIsLoading(false);
     }
@@ -64,7 +64,7 @@ function SearchContent() {
       const res = await tmdb.get("/genre/movie/list");
       setGenres(res.data.genres);
     } catch (err) {
-      console.error("Жанр татахад алдаа гарлаа:", err);
+      console.error("Failed to fetch genre.", err);
     }
   };
 
@@ -103,7 +103,7 @@ function SearchContent() {
       <div className="grid grid-cols-12 gap-10 pt-3">
         <div className="col-span-12 lg:col-span-9">
           {isLoading ? (
-            <div className="py-20 text-center">Уншиж байна...</div>
+            <div className="py-20 text-center">Loading...</div>
           ) : (
             <>
               <div className="mb-6">
@@ -131,11 +131,21 @@ function SearchContent() {
                   </div>
                 </>
               ) : (
-                <div className="w-full border border-gray-200 dark:border-gray-800 rounded-lg py-20 flex items-center justify-center">
-                  <p className="text-sm font-medium">
-                    No results found for "{query || search}"
-                  </p>
-                </div>
+                <>
+                  <div className="w-full border border-gray-200 dark:border-gray-800 rounded-lg py-10 flex items-center justify-center">
+                    <p className="text-sm font-medium">
+                      No results found for "{query || search}"
+                    </p>
+                  </div>
+                  <div
+                    className={`mt-12 mb-10 ${results.length === 0 ? "opacity-40 pointer-events-none" : ""}`}
+                  >
+                    <Pagination
+                      currentPage={page}
+                      onPageChange={(p) => fetchData(p)}
+                    />
+                  </div>
+                </>
               )}
             </>
           )}

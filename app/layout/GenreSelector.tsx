@@ -51,7 +51,7 @@ const handleGenreClick = (id: number) => {
 
       <div
         data-shown={isVisible}
-        className={`text-black dark:text-white bg-white dark:bg-black absolute left-0 z-50 duration-300 p-5 border border-[#E4E4E7] dark:border-gray-600 rounded-lg mt-1 data-[shown=true]:visible data-[shown=true]:opacity-100 invisible opacity-0 shadow-xl`}
+        className={`text-black dark:text-white bg-white dark:bg-black absolute left-0 z-50 duration-300 p-5 border border-[#E4E4E7] dark:border-gray-600 rounded-lg mt-1 data-[shown=true]:visible data-[shown=true]:opacity-100 invisible opacity-0 shadow-xl w-[577px]`}
       >
         <div className="mt-1 font-semibold text-2xl">Genres</div>
         <div className="text-sm opacity-70">See lists of movies by genre</div>
