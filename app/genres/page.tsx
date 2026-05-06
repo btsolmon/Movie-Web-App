@@ -103,7 +103,8 @@ function GenresContent() {
 
         <div className="flex-1">
           <h2 className="text-xl font-bold mb-6">
-            {totalResults} titles in "{selectedGenreNames || "All Genres"}"
+            {totalResults} titles in &quot;{selectedGenreNames || "All Genres"}
+            &quot;
           </h2>
 
           {isLoading ? (
@@ -120,7 +121,11 @@ function GenresContent() {
                 ))}
               </div>
               <div className="mt-10">
-                <Pagination currentPage={page} onPageChange={fetchMovies} />
+                <Pagination
+                  currentPage={page}
+                  onPageChange={fetchMovies}
+                  totalPages={0}
+                />
               </div>
             </>
           )}

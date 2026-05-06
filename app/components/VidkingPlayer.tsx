@@ -22,10 +22,9 @@ export function VidkingPlayer({
   const qs = new URLSearchParams({
     color: "e50914",
     autoPlay: "true",
-    ...(resumeAt ? { progress: String(resumeAt) } : {}),
+    ...(resumeAt != null ? { progress: String(resumeAt) } : {}),
     ...(type === "tv" ? { nextEpisode: "true", episodeSelector: "true" } : {}),
   });
-
   return (
     <div className="w-full h-full">
       <iframe

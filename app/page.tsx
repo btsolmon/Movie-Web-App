@@ -175,6 +175,7 @@ export default function Home() {
           <Pagination
             currentPage={page}
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
+            totalPages={0}
           />
         </main>
       </div>

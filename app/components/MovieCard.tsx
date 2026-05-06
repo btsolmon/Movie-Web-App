@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 
 interface MovieCardProps {
@@ -9,6 +10,7 @@ interface MovieCardProps {
   };
   getImageUrl: (path: string | null, size: string) => string;
 }
+
 const MovieCard = ({ movie, getImageUrl }: MovieCardProps) => {
   return (
     <Link href={`/movie/${movie.id}`} className="group cursor-pointer">

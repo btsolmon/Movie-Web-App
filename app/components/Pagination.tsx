@@ -30,7 +30,13 @@ const PaginationItem = ({
 export const PaginationPlaceHolder = () => {
   return (
     <PaginationItem>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           d="M11.9993 12.6668C12.3675 12.6668 12.666 12.3684 12.666 12.0002C12.666 11.632 12.3675 11.3335 11.9993 11.3335C11.6312 11.3335 11.3327 11.632 11.3327 12.0002C11.3327 12.3684 11.6312 12.6668 11.9993 12.6668Z"
           stroke="#09090B"
@@ -54,7 +60,11 @@ export const PaginationPlaceHolder = () => {
   );
 };
 
-export const Pagination = ({ totalPages, currentPage, onPageChange }: PaginationProps) => {
+export const Pagination = ({
+  totalPages,
+  currentPage,
+  onPageChange,
+}: PaginationProps) => {
   const handlePrev = () => {
     onPageChange(currentPage - 1);
   };
@@ -65,12 +75,25 @@ export const Pagination = ({ totalPages, currentPage, onPageChange }: Pagination
   return (
     <div className="flex justify-end gap-1 my-10">
       <PaginationItem disabled={currentPage === 1} onClick={handlePrev}>
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M10 12L6 8L10 4" stroke="currentcolor" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M10 12L6 8L10 4"
+            stroke="currentcolor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
         Previous
       </PaginationItem>
-      {currentPage > 2 && <PaginationItem onClick={() => onPageChange(1)}>1</PaginationItem>}
+      {currentPage > 2 && (
+        <PaginationItem onClick={() => onPageChange(1)}>1</PaginationItem>
+      )}
       {currentPage > 3 && <PaginationPlaceHolder />}
 
       {currentPage === 1 && (
@@ -83,7 +106,11 @@ export const Pagination = ({ totalPages, currentPage, onPageChange }: Pagination
         const page = currentPage + num;
         if (page !== 0 && page !== 1 && page !== totalPages) {
           return (
-            <PaginationItem active={page === currentPage} key={num} onClick={() => onPageChange(page)}>
+            <PaginationItem
+              active={page === currentPage}
+              key={num}
+              onClick={() => onPageChange(page)}
+            >
               {page}
             </PaginationItem>
           );
@@ -91,12 +118,30 @@ export const Pagination = ({ totalPages, currentPage, onPageChange }: Pagination
       })}
 
       {totalPages - 3 > currentPage && <PaginationPlaceHolder />}
-      {totalPages - 2 > currentPage && <PaginationItem onClick={() => onPageChange(1)}>{totalPages}</PaginationItem>}
+      {totalPages - 2 > currentPage && (
+        <PaginationItem onClick={() => onPageChange(1)}>
+          {totalPages}
+        </PaginationItem>
+      )}
 
-      <PaginationItem onClick={handleNext} disabled={currentPage === totalPages}>
+      <PaginationItem
+        onClick={handleNext}
+        disabled={currentPage === totalPages}
+      >
         Next
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 12L10 8L6 4" stroke="currentcolor" strokeLinecap="round" strokeLinejoin="round" />
+        <svg
+          width="16"
+          height="16"
+          viewBox="0 0 16 16"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M6 12L10 8L6 4"
+            stroke="currentcolor"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
         </svg>
       </PaginationItem>
     </div>

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
@@ -111,6 +112,7 @@ export default function MovieDetail() {
           <Pagination
             currentPage={page}
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
+            totalPages={0}
           />
         </main>
       </div>
@@ -118,6 +120,7 @@ export default function MovieDetail() {
   }
 
   const director = movie.credits?.crew?.find(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (c: any) => c.job === "Director",
   )?.name;
   const writers = movie.credits?.crew
