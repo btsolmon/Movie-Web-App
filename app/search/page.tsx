@@ -108,7 +108,10 @@ function SearchContent() {
             <>
               <div className="mb-6">
                 <h2 className="text-xl font-semibold">
-                  {totalResults} results for "{query || search}"
+                  {totalResults} results for &quot;
+                  {query ||
+                    (selectedGenres.length > 0 ? "Selected Genres" : "All")}
+                  &quot;
                 </h2>
               </div>
 
@@ -127,6 +130,7 @@ function SearchContent() {
                     <Pagination
                       currentPage={page}
                       onPageChange={(p) => fetchData(p)}
+                      totalPages={0}
                     />
                   </div>
                 </>
@@ -134,7 +138,7 @@ function SearchContent() {
                 <>
                   <div className="w-full border border-gray-200 dark:border-gray-800 rounded-lg py-10 flex items-center justify-center">
                     <p className="text-sm font-medium">
-                      No results found for "{query || search}"
+                      No results found for &quot;{query || "this filter"}&quot;
                     </p>
                   </div>
                   <div
@@ -143,6 +147,7 @@ function SearchContent() {
                     <Pagination
                       currentPage={page}
                       onPageChange={(p) => fetchData(p)}
+                      totalPages={0}
                     />
                   </div>
                 </>

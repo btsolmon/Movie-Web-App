@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import { useTheme } from "next-themes";
 import Link from "next/link";

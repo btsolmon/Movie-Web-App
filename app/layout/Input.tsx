@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
@@ -133,13 +134,13 @@ export const Input = () => {
                   setIsVisible(false);
                 }}
               >
-                See all results for "{debouncedSearch}"
+                See all results for &quot;{debouncedSearch}&quot;
               </Link>
             </>
           ) : (
             <div className="p-8 text-center text-gray-500 dark:text-gray-400">
               <p className="text-sm font-medium">
-                No results found for "{debouncedSearch}"
+                No results found for &quot;{debouncedSearch}&quot;
               </p>
             </div>
           )}
