@@ -4,10 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Movie } from "@/types";
 import { tmdb } from "@/lib/tmdb";
 import MovieSection from "./components/MovieSection";
-import MovieCard from "./components/MovieCard";
-import { Pagination } from "./components/Pagination";
 import { VidkingPlayer } from "./components/VidkingPlayer";
-import { useTheme } from "next-themes";
 import { Container } from "./components/Container";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
@@ -22,33 +19,38 @@ export default function Home() {
   const [popularMovies, setPopularMovies] = useState<Movie[]>([]);
   const [topRatedMovies, setTopRatedMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [viewCategory, setViewCategory] = useState<string | null>(null);
-  const [categoryMovies, setCategoryMovies] = useState<Movie[]>([]);
-  const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
-  const { theme, setTheme } = useTheme();
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const HeroSkeleton = () => (
-    <div className="w-full h-[800px] bg-gray-200 animate-pulse flex items-center">
-      <div className="max-w-[1440px] mx-auto px-20 flex flex-col gap-4">
-        <div className="h-6 w-32 bg-gray-300 rounded" />
-        <div className="h-20 w-[500px] bg-gray-300 rounded" />
-        <div className="h-6 w-24 bg-gray-300 rounded" />
-        <div className="h-24 w-[450px] bg-gray-300 rounded" />
-        <div className="h-10 w-36 bg-gray-300 rounded mt-4" />
-      </div>
+    <div className="w-full h-[800px] flex items-center">
+      <Container>
+        <div className="relative z-10 flex flex-col gap-4">
+          <div className="h-7 w-32 bg-gray-300 rounded animate-pulse" />
+          <div className="h-[72px] w-full max-w-2xl bg-gray-300 rounded animate-pulse" />
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-gray-300 rounded-full animate-pulse" />
+            <div className="h-7 w-20 bg-gray-300 rounded animate-pulse" />
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="h-4 w-full max-w-lg bg-gray-300 rounded animate-pulse" />
+            <div className="h-4 w-full max-w-lg bg-gray-300 rounded animate-pulse" />
+            <div className="h-4 w-full max-w-[300px] bg-gray-300 rounded animate-pulse" />
+          </div>
+          <div className="w-[145px] h-[44px] bg-gray-300 rounded-md mt-2 animate-pulse" />
+        </div>
+      </Container>
     </div>
   );
 
   useEffect(() => {
-    if (trendingMovies.length === 0 || viewCategory) return;
+    if (trendingMovies.length === 0) return;
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
     return () => clearInterval(interval);
-  }, [activeIndex, trendingMovies, viewCategory]);
+  }, [activeIndex, trendingMovies]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -117,53 +119,6 @@ export default function Home() {
       scrollToMovie(nextIndex);
     }
   };
-
-  const fetchCategory = async (type: string, pageNum: number) => {
-    setIsLoading(true);
-    try {
-      const res = await tmdb.get(`/movie/${type}?page=${pageNum}`);
-      setCategoryMovies(res.data.results.slice(0, 10));
-      setViewCategory(type);
-      setPage(pageNum);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (viewCategory) {
-    return (
-      <div className="w-full flex flex-col min-h-screen">
-        <Container>
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold capitalize">{viewCategory}</h2>
-            <button
-              onClick={() => setViewCategory(null)}
-              className="gap-2 text-sm font-semibold hover:underline cursor-pointer"
-            >
-              ← Back
-            </button>
-          </div>
-
-          <div className="grid grid-cols-5 gap-8">
-            {categoryMovies.map((movie) => (
-              <MovieCard
-                key={movie.id}
-                movie={movie}
-                getImageUrl={getImageUrl}
-              />
-            ))}
-          </div>
-          <Pagination
-            currentPage={page}
-            onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
-            totalPages={0}
-          />
-        </Container>
-      </div>
-    );
-  }
 
   return (
     <div className="w-full mx-auto min-h-screen">
@@ -241,8 +196,7 @@ export default function Home() {
         movies={upcomingMovies}
         isLoading={isLoading}
         getImageUrl={getImageUrl}
-        categoryPath="upcoming"
-        onSeeMore={() => fetchCategory("upcoming", 1)}
+        seeMoreHref="/upcoming"
       />
 
       <MovieSection
@@ -250,8 +204,7 @@ export default function Home() {
         movies={popularMovies}
         isLoading={isLoading}
         getImageUrl={getImageUrl}
-        categoryPath="popular"
-        onSeeMore={() => fetchCategory("popular", 1)}
+        seeMoreHref="/popular"
       />
 
       <MovieSection
@@ -259,8 +212,7 @@ export default function Home() {
         movies={topRatedMovies}
         isLoading={isLoading}
         getImageUrl={getImageUrl}
-        categoryPath="top-rated"
-        onSeeMore={() => fetchCategory("top_rated", 1)}
+        seeMoreHref="/top-rated"
       />
 
       {playingMovieId && (

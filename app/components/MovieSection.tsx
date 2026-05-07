@@ -8,8 +8,9 @@ interface MovieSectionProps {
   movies: any[];
   isLoading: boolean;
   getImageUrl: (path: string | null, size: string) => string;
-  categoryPath: string;
+  categoryPath?: string;
   onSeeMore?: () => void;
+  seeMoreHref?: string;
 }
 
 const MovieGridSkeleton = () => (
@@ -31,22 +32,31 @@ const MovieSection = ({
   getImageUrl,
   categoryPath,
   onSeeMore,
+  seeMoreHref,
 }: MovieSectionProps) => {
   return (
-    <section className="py-16">
+    <section className="py-16 text-black dark:text-white">
       <Container>
         <div className="flex justify-between items-center mb-10">
           <h2 className="text-2xl font-semibold uppercase">{title}</h2>
-          <Link
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              if (onSeeMore) onSeeMore();
-            }}
-            className="flex items-center gap-2 text-sm font-semibold hover:underline cursor-pointer"
-          >
-            See more <span>→</span>
-          </Link>
+          {seeMoreHref ? (
+            <Link
+              href={seeMoreHref}
+              className="flex items-center gap-2 text-sm font-semibold hover:underline cursor-pointer"
+            >
+              See more <span>→</span>
+            </Link>
+          ) : (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (onSeeMore) onSeeMore();
+              }}
+              className="flex items-center gap-2 text-sm font-semibold hover:underline cursor-pointer"
+            >
+              See more <span>→</span>
+            </button>
+          )}
         </div>
 
         {isLoading ? (
@@ -54,7 +64,11 @@ const MovieSection = ({
         ) : (
           <div className="grid grid-cols-5 gap-8">
             {movies.slice(0, 10).map((movie) => (
-              <MovieCard key={movie.id} movie={movie} getImageUrl={getImageUrl} />
+              <MovieCard
+                key={movie.id}
+                movie={movie}
+                getImageUrl={getImageUrl}
+              />
             ))}
           </div>
         )}

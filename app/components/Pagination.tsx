@@ -119,7 +119,7 @@ export const Pagination = ({
 
       {totalPages - 3 > currentPage && <PaginationPlaceHolder />}
       {totalPages - 2 > currentPage && (
-        <PaginationItem onClick={() => onPageChange(1)}>
+        <PaginationItem onClick={() => onPageChange(totalPages)}>
           {totalPages}
         </PaginationItem>
       )}

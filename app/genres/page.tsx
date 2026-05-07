@@ -21,6 +21,7 @@ function GenresContent() {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [genres, setGenres] = useState<{ id: number; name: string }[]>([]);
   const [totalResults, setTotalResults] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -40,6 +41,7 @@ function GenresContent() {
       });
       setMovies(res.data.results.slice(0, 8));
       setTotalResults(res.data.total_results);
+      setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
       setPage(p);
     } catch (err) {
       console.error(err);
@@ -126,7 +128,7 @@ function GenresContent() {
                 <Pagination
                   currentPage={page}
                   onPageChange={fetchMovies}
-                  totalPages={0}
+                  totalPages={totalPages}
                 />
               </div>
             </>
@@ -139,7 +141,13 @@ function GenresContent() {
 
 export default function GenresPage() {
   return (
-    <Suspense fallback={<div className="w-full mx-auto py-10 px-20 min-h-screen">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="w-full mx-auto py-10 px-20 min-h-screen">
+          Loading...
+        </div>
+      }
+    >
       <GenresContent />
     </Suspense>
   );

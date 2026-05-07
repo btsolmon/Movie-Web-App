@@ -24,6 +24,7 @@ function SearchContent() {
 
   const [results, setResults] = useState<Movie[]>([]);
   const [totalResults, setTotalResults] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [genres, setGenres] = useState<{ id: number; name: string }[]>([]);
@@ -52,6 +53,7 @@ function SearchContent() {
 
       setResults(res.data.results.slice(0, 8));
       setTotalResults(res.data.total_results);
+      setTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
       setPage(newPage);
       window.scrollTo(0, 0);
     } catch (err) {
@@ -61,29 +63,20 @@ function SearchContent() {
     }
   };
 
-  const fetchGenres = async () => {
-    try {
-      const res = await tmdb.get("/genre/movie/list");
-      setGenres(res.data.genres);
-    } catch (err) {
-      console.error("Failed to fetch genre.", err);
-    }
-  };
-
   useEffect(() => {
     fetchData(1);
+    const fetchGenres = async () => {
+      const res = await tmdb.get("/genre/movie/list");
+      setGenres(res.data.genres);
+    };
     fetchGenres();
   }, [query, searchParams.get("genre")]);
 
   const handleGenreToggle = (id: number) => {
     const idStr = id.toString();
-    let newGenres: string[];
-
-    if (selectedGenres.includes(idStr)) {
-      newGenres = selectedGenres.filter((g) => g !== idStr);
-    } else {
-      newGenres = [...selectedGenres, idStr];
-    }
+    const newGenres = selectedGenres.includes(idStr)
+      ? selectedGenres.filter((g) => g !== idStr)
+      : [...selectedGenres, idStr];
 
     const params = new URLSearchParams(searchParams.toString());
 
@@ -92,6 +85,8 @@ function SearchContent() {
     } else {
       params.delete("genre");
     }
+
+    params.delete("q");
 
     params.set("page", "1");
 
@@ -110,10 +105,8 @@ function SearchContent() {
             <>
               <div className="mb-6">
                 <h2 className="text-xl font-semibold">
-                  {totalResults} results for &quot;
-                  {query ||
-                    (selectedGenres.length > 0 ? "Selected Genres" : "All")}
-                  &quot;
+                  {totalResults} results {query && `for "${query}"`}
+                  {!query && selectedGenres.length > 0 && ` for Selected Genre`}
                 </h2>
               </div>
 
@@ -132,63 +125,43 @@ function SearchContent() {
                     <Pagination
                       currentPage={page}
                       onPageChange={(p) => fetchData(p)}
-                      totalPages={0}
+                      totalPages={totalPages}
                     />
                   </div>
                 </>
               ) : (
-                <>
-                  <div className="w-full border border-gray-200 dark:border-gray-800 rounded-lg py-10 flex items-center justify-center">
-                    <p className="text-sm font-medium">
-                      No results found for &quot;{query || "this filter"}&quot;
-                    </p>
-                  </div>
-                  <div
-                    className={`mt-12 mb-10 ${results.length === 0 ? "opacity-40 pointer-events-none" : ""}`}
-                  >
-                    <Pagination
-                      currentPage={page}
-                      onPageChange={(p) => fetchData(p)}
-                      totalPages={0}
-                    />
-                  </div>
-                </>
+                <div className="w-full border border-gray-200 dark:border-gray-800 rounded-lg py-10 flex items-center justify-center">
+                  <p className="text-sm font-medium">No results found.</p>
+                </div>
               )}
             </>
           )}
         </div>
 
         <div className="hidden lg:block lg:col-span-3">
-          <div>
-            <h3 className="text-2xl font-bold mb-1">Search by genre</h3>
-            <p className="text-lg text-gray-500 mb-5">
-              See lists of movies by genre
-            </p>
-
-            <div className="flex flex-wrap gap-2">
-              {genres.map((genre) => {
-                const isActive = selectedGenres.includes(genre.id.toString());
-
-                return (
-                  <button
-                    key={genre.id}
-                    onClick={() => handleGenreToggle(genre.id)}
-                    className={`flex items-center gap-1 px-3 py-1.5 border rounded-full text-xs font-semibold transition-all ${
-                      isActive
-                        ? "bg-black text-white dark:bg-white dark:text-black border-transparent"
-                        : "border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-zinc-800"
-                    }`}
-                  >
-                    {genre.name}
-                    {isActive ? (
-                      <span className="ml-1 text-[10px]">✕</span>
-                    ) : (
-                      <span className="ml-1 opacity-40">›</span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+          <h3 className="text-2xl font-bold mb-1">Search by genre</h3>
+          <p className="text-lg text-gray-500 mb-5">
+            See lists of movies by genre
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {genres.map((genre) => {
+              const isActive = selectedGenres.includes(genre.id.toString());
+              return (
+                <button
+                  key={genre.id}
+                  onClick={() => handleGenreToggle(genre.id)}
+                  className={`flex items-center gap-1 px-3 py-1.5 border rounded-full text-xs font-semibold transition-all ${
+                    isActive
+                      ? "bg-black text-white dark:bg-white dark:text-black border-transparent"
+                      : "border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-zinc-800"
+                  }`}
+                >
+                  {genre.name}
+                  {isActive && <span className="ml-1 text-[10px]">✕</span>}
+                  {!isActive && <span className="ml-1 opacity-40">›</span>}
+                </button>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -198,7 +171,13 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="w-full mx-auto pt-10 px-20 min-h-screen text-black dark:text-white">Loading...</div>}>
+    <Suspense
+      fallback={
+        <div className="w-full mx-auto pt-10 px-20 min-h-screen">
+          Loading...
+        </div>
+      }
+    >
       <SearchContent />
     </Suspense>
   );

@@ -24,6 +24,7 @@ export default function MovieDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [viewCategory, setViewCategory] = useState<string | null>(null);
   const [categoryMovies, setCategoryMovies] = useState<Movie[]>([]);
+  const [categoryTotalPages, setCategoryTotalPages] = useState(0);
   const [page, setPage] = useState(1);
   const [playingMovieId, setPlayingMovieId] = useState<number | null>(null);
 
@@ -52,7 +53,7 @@ export default function MovieDetail() {
       ]);
 
       setMovie(movieRes.data);
-      setRecommendations(recommendRes.data.results.slice(0, 5));
+      setRecommendations(recommendRes.data.results);
     } catch (err) {
       console.error("Failed to fetch data.", err);
     } finally {
@@ -70,7 +71,8 @@ export default function MovieDetail() {
         params: { page: newPage },
       });
 
-      setCategoryMovies(res.data.results.slice(0, 10));
+      setCategoryMovies(res.data.results);
+      setCategoryTotalPages(res.data.total_pages > 500 ? 500 : res.data.total_pages);
       window.scrollTo(0, 0);
     } catch (err) {
       console.error("Failed to fetch category.", err);
@@ -83,7 +85,7 @@ export default function MovieDetail() {
     return <MovieDetailSkeleton />;
   }
 
-  if (!movie && !isLoading) {
+if (!movie && !isLoading) {
     return (
       <Container>
         <div className="py-20 text-center">Movie not found.</div>
@@ -117,7 +119,7 @@ export default function MovieDetail() {
           <Pagination
             currentPage={page}
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
-            totalPages={0}
+            totalPages={categoryTotalPages}
           />
         </Container>
       </div>
@@ -125,7 +127,6 @@ export default function MovieDetail() {
   }
 
   const director = movie.credits?.crew?.find(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (c: any) => c.job === "Director",
   )?.name;
   const writers = movie.credits?.crew
@@ -210,7 +211,7 @@ export default function MovieDetail() {
 
       <Container>
         <div>
-          <div className="flex flex-wrap gap-2 mb-6">
+          <div className="flex flex-wrap gap-2 mb-6 dark:text-white">
             {movie.genres?.map((g: any) => (
               <span
                 key={g.id}
@@ -227,7 +228,7 @@ export default function MovieDetail() {
       </Container>
 
       <Container>
-        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6">
+        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6 dark:text-white">
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Director</span>
             <span className="text-sm hover:underline cursor-pointer">
@@ -254,11 +255,10 @@ export default function MovieDetail() {
       {recommendations.length > 0 && (
         <MovieSection
           title="More like this"
-          movies={recommendations}
+          movies={recommendations.slice(0, 5)}
           isLoading={isLoading}
           getImageUrl={getImageUrl}
-          categoryPath="recommendations"
-          onSeeMore={() => fetchCategory("recommendations", 1)}
+          seeMoreHref={`/recommendations?movieId=${movie.id}`}
         />
       )}
 
