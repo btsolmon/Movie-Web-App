@@ -6,6 +6,7 @@ import { tmdb } from "@/lib/tmdb";
 import { Movie } from "@/types";
 import MovieCard from "@/app/components/MovieCard";
 import { Pagination } from "@/app/components/Pagination";
+import { Container } from "@/app/components/Container";
 
 const getImageUrl = (path: string | null) =>
   path ? `https://image.tmdb.org/t/p/w500${path}` : "/placeholder.jpg";
@@ -68,7 +69,7 @@ function GenresContent() {
     .join(", ");
 
   return (
-    <div className="max-w-[1200px] mx-auto py-10 px-6 min-h-screen">
+    <Container>
       <h1 className="text-3xl font-bold mb-8">Search filter</h1>
 
       <div className="flex flex-col lg:flex-row gap-10">
@@ -132,13 +133,13 @@ function GenresContent() {
           )}
         </div>
       </div>
-    </div>
+    </Container>
   );
 }
 
 export default function GenresPage() {
   return (
-    <Suspense fallback={<div className="max-w-[1200px] mx-auto py-10 px-6 min-h-screen">Loading...</div>}>
+    <Suspense fallback={<div className="w-full mx-auto py-10 px-20 min-h-screen">Loading...</div>}>
       <GenresContent />
     </Suspense>
   );

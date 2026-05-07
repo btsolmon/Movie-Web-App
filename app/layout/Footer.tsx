@@ -1,6 +1,9 @@
+import { Container } from "@/app/components/Container";
+
 export const Footer = () => {
   return (
-    <div className="w-full h-[280px] bg-[#4338ca] size-3.5 text-white flex justify-between px-20 p-10  gap-12">
+    <div className="w-full h-[280px] bg-[#4338ca] size-3.5 text-white flex flex-col p-10">
+      <Container className="flex justify-between gap-12">
       <div className="flex flex-col gap-3 ">
         <div className="flex gap-2">
           <img className="w-4 h-4" src="film-white.svg" />
@@ -36,6 +39,7 @@ export const Footer = () => {
           </div>
         </div>
       </div>
-    </div>
-  );
+    </Container>
+  </div>
+);
 };

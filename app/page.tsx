@@ -8,6 +8,7 @@ import MovieCard from "./components/MovieCard";
 import { Pagination } from "./components/Pagination";
 import { VidkingPlayer } from "./components/VidkingPlayer";
 import { useTheme } from "next-themes";
+import { Container } from "./components/Container";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -30,8 +31,8 @@ export default function Home() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const HeroSkeleton = () => (
-    <div className="w-full h-[800px] bg-gray-200 animate-pulse flex items-center pl-35">
-      <div className="flex flex-col gap-4">
+    <div className="w-full h-[800px] bg-gray-200 animate-pulse flex items-center">
+      <div className="max-w-[1440px] mx-auto px-20 flex flex-col gap-4">
         <div className="h-6 w-32 bg-gray-300 rounded" />
         <div className="h-20 w-[500px] bg-gray-300 rounded" />
         <div className="h-6 w-24 bg-gray-300 rounded" />
@@ -41,25 +42,11 @@ export default function Home() {
     </div>
   );
 
-  const MovieGridSkeleton = () => (
-    <div className="grid grid-cols-5 gap-8">
-      {[...Array(5)].map((_, i) => (
-        <div key={i} className="animate-pulse">
-          <div className="aspect-[2/3] bg-gray-200 rounded-2xl mb-4" />
-          <div className="h-4 w-1/2 bg-gray-200 rounded mb-2" />
-          <div className="h-6 w-full bg-gray-200 rounded" />
-        </div>
-      ))}
-    </div>
-  );
-
   useEffect(() => {
     if (trendingMovies.length === 0 || viewCategory) return;
-
     const interval = setInterval(() => {
       handleNext();
     }, 5000);
-
     return () => clearInterval(interval);
   }, [activeIndex, trendingMovies, viewCategory]);
 
@@ -74,7 +61,6 @@ export default function Home() {
             tmdb.get("/movie/popular?language=en-US&page=1"),
             tmdb.get("/movie/top_rated?language=en-US&page=1"),
           ]);
-
         setTrendingMovies(trendingRes.data.results.slice(0, 10));
         setUpcomingMovies(upcomingRes.data.results.slice(0, 10));
         setPopularMovies(popularRes.data.results.slice(0, 10));
@@ -111,17 +97,14 @@ export default function Home() {
         left: index * clientWidth,
         behavior: "smooth",
       });
-
       setActiveIndex(index);
     }
   };
 
   const handleNext = () => {
     if (!scrollContainerRef.current) return;
-
     const container = scrollContainerRef.current;
     const isLastSlide = activeIndex === trendingMovies.length - 1;
-
     if (isLastSlide) {
       container.style.scrollBehavior = "auto";
       container.scrollLeft = 0;
@@ -151,13 +134,13 @@ export default function Home() {
 
   if (viewCategory) {
     return (
-      <div className=" w-[1440px] mx-auto  min-h-screen">
-        <main className=" p-10">
+      <div className="w-full flex flex-col min-h-screen">
+        <Container>
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold capitalize">{viewCategory}</h2>
             <button
               onClick={() => setViewCategory(null)}
-              className=" gap-2 text-sm font-semibold hover:underline cursor-pointer"
+              className="gap-2 text-sm font-semibold hover:underline cursor-pointer"
             >
               ← Back
             </button>
@@ -177,13 +160,13 @@ export default function Home() {
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
             totalPages={0}
           />
-        </main>
+        </Container>
       </div>
     );
   }
 
   return (
-    <div className="w-[1440px] flex flex-col min-h-screen mx-auto ">
+    <div className="w-full mx-auto min-h-screen">
       {isLoading ? (
         <HeroSkeleton />
       ) : (
@@ -202,26 +185,28 @@ export default function Home() {
                 }}
               >
                 <div className="absolute inset-0 bg-black/40" />
-                <div className="relative z-10 w-[600px] flex flex-col gap-4 pl-35">
-                  <p className="text-lg font-medium">Now Playing:</p>
-                  <h1 className="text-6xl font-extrabold uppercase">
-                    {movie.title}
-                  </h1>
-                  <div className="flex items-center gap-2 text-xl font-bold">
-                    <img src="/star.svg" alt="star" className="w-6 h-6" />
-                    <span>{movie.vote_average.toFixed(1)}/10</span>
+                <Container>
+                  <div className="relative z-10 flex flex-col gap-4">
+                    <p className="text-lg font-medium">Now Playing:</p>
+                    <h1 className="text-6xl font-extrabold uppercase">
+                      {movie.title}
+                    </h1>
+                    <div className="flex items-center gap-2 text-xl font-bold">
+                      <img src="/star.svg" alt="star" className="w-6 h-6" />
+                      <span>{movie.vote_average.toFixed(1)}/10</span>
+                    </div>
+                    <p className="text-base text-gray-200 max-w-lg line-clamp-3">
+                      {movie.overview}
+                    </p>
+                    <button
+                      onClick={() => setPlayingMovieId(movie.id)}
+                      className="w-[145px] flex items-center gap-3 bg-gray-200 text-black px-3 py-2 rounded-md hover:scale-110 transition-transform"
+                    >
+                      <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
+                      <span>Watch Now</span>
+                    </button>
                   </div>
-                  <p className="text-base text-gray-200 max-w-lg line-clamp-3">
-                    {movie.overview}
-                  </p>
-                  <button
-                    onClick={() => setPlayingMovieId(movie.id)}
-                    className="w-[145px] flex items-center gap-3 bg-gray-200 text-black px-3 py-2 rounded-md hover:scale-110 transition-transform"
-                  >
-                    <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
-                    <span>Watch Now</span>
-                  </button>
-                </div>
+                </Container>
               </div>
             ))}
           </div>
@@ -287,7 +272,7 @@ export default function Home() {
             ×
           </button>
 
-          <div className="w-full max-w-6xl p-4">
+          <div className="w-full max-w-6xl px-20">
             <VidkingPlayer tmdbId={playingMovieId} type="movie" />
           </div>
         </div>

@@ -9,6 +9,7 @@ import MovieCard from "@/app/components/MovieCard";
 import { Pagination } from "@/app/components/Pagination";
 import { VidkingPlayer } from "@/app/components/VidkingPlayer";
 import MovieDetailSkeleton from "@/app/components/MovieDetailSkeleton";
+import { Container } from "@/app/components/Container";
 
 const getImageUrl = (path: string | null, size: string = "original") => {
   return path
@@ -83,13 +84,17 @@ export default function MovieDetail() {
   }
 
   if (!movie && !isLoading) {
-    return <div className="p-20 text-center">Movie not found.</div>;
+    return (
+      <Container>
+        <div className="py-20 text-center">Movie not found.</div>
+      </Container>
+    );
   }
 
   if (viewCategory) {
     return (
-      <div className="max-w-[1440px] mx-auto  min-h-screen ">
-        <main className="p-10 ">
+      <div className="w-full flex flex-col min-h-screen">
+        <Container>
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold capitalize">More like this</h2>
             <button
@@ -114,7 +119,7 @@ export default function MovieDetail() {
             onPageChange={(newPage) => fetchCategory(viewCategory, newPage)}
             totalPages={0}
           />
-        </main>
+        </Container>
       </div>
     );
   }
@@ -135,69 +140,75 @@ export default function MovieDetail() {
 
   return (
     <div className=" min-h-screen text-black">
-      <main className="max-w-[1200px] mx-auto pt-10 px-6 text-black dark:text-white ">
-        <div className="flex justify-between items-end mb-8">
-          <div>
-            <h1 className="text-4xl font-semibold mb-2 ">{movie.title}</h1>
-            <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
-              <span>{movie.release_date?.split("-")[0]}</span>
-              <span>•</span>
-              <span>{movie.adult ? "R" : "PG"}</span>
-              <span>•</span>
-              <span>
-                {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
+      <Container>
+        <main className="pt-10 text-black dark:text-white">
+          <div className="flex justify-between items-end mb-8">
+            <div>
+              <h1 className="text-4xl font-semibold mb-2 ">{movie.title}</h1>
+              <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                <span>{movie.release_date?.split("-")[0]}</span>
+                <span>•</span>
+                <span>{movie.adult ? "R" : "PG"}</span>
+                <span>•</span>
+                <span>
+                  {Math.floor(movie.runtime / 60)}h {movie.runtime % 60}m
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
+                Rating
               </span>
-            </div>
-          </div>
-          <div className="flex flex-col items-end">
-            <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
-              Rating
-            </span>
-            <div className="flex items-center gap-1">
-              <img src="/star.svg" className="w-6 h-6" alt="star" />
-              <div className="flex flex-col leading-none">
-                <span className="text-xl font-bold">
-                  {movie.vote_average?.toFixed(1)}
-                  <span className="text-sm text-gray-500 font-normal">/10</span>
-                </span>
-                <span className="text-[10px] text-gray-500 font-medium">
-                  {movie.vote_count >= 1000
-                    ? (movie.vote_count / 1000).toFixed(0) + "k"
-                    : movie.vote_count}
-                </span>
+              <div className="flex items-center gap-1">
+                <img src="/star.svg" className="w-6 h-6" alt="star" />
+                <div className="flex flex-col leading-none">
+                  <span className="text-xl font-bold">
+                    {movie.vote_average?.toFixed(1)}
+                    <span className="text-sm text-gray-500 font-normal">
+                      /10
+                    </span>
+                  </span>
+                  <span className="text-[10px] text-gray-500 font-medium">
+                    {movie.vote_count >= 1000
+                      ? (movie.vote_count / 1000).toFixed(0) + "k"
+                      : movie.vote_count}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-12 gap-5 mb-10 h-[500px]">
-          <div className="col-span-4 rounded-sm overflow-hidden shadow-2xl">
-            <img
-              src={getImageUrl(movie.poster_path, "w780")}
-              className="w-full h-full object-cover"
-              alt={movie.title}
-            />
+          <div className="grid grid-cols-12 gap-5 mb-10 h-[500px] mt-10">
+            <div className="col-span-4 rounded-sm overflow-hidden shadow-2xl">
+              <img
+                src={getImageUrl(movie.poster_path, "w780")}
+                className="w-full h-full object-cover"
+                alt={movie.title}
+              />
+            </div>
+            <div className="col-span-8 relative rounded-sm overflow-hidden group shadow-lg">
+              <img
+                src={getImageUrl(movie.backdrop_path, "original")}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                alt="backdrop"
+              />
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all" />
+
+              <button
+                onClick={() => setPlayingMovieId(movie.id)}
+                className="absolute bottom-8 left-8 flex items-center gap-3 /10 hover:/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95"
+              >
+                <div className="w-10 h-10  rounded-full flex items-center justify-center shadow-lg">
+                  <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
+                </div>
+                <span>Watch Now</span>
+              </button>
+            </div>
           </div>
-          <div className="col-span-8 relative rounded-sm overflow-hidden group shadow-lg">
-            <img
-              src={getImageUrl(movie.backdrop_path, "original")}
-              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              alt="backdrop"
-            />
-            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all" />
+        </main>
+      </Container>
 
-            <button
-              onClick={() => setPlayingMovieId(movie.id)}
-              className="absolute bottom-8 left-8 flex items-center gap-3 /10 hover:/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95"
-            >
-              <div className="w-10 h-10  rounded-full flex items-center justify-center shadow-lg">
-                <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
-              </div>
-              <span>Watch Now</span>
-            </button>
-          </div>
-        </div>
-
+      <Container>
         <div>
           <div className="flex flex-wrap gap-2 mb-6">
             {movie.genres?.map((g: any) => (
@@ -213,7 +224,9 @@ export default function MovieDetail() {
             {movie.overview}
           </p>
         </div>
+      </Container>
 
+      <Container>
         <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6">
           <div className="grid grid-cols-[100px_1fr] items-center">
             <span className="font-bold text-sm">Director</span>
@@ -236,18 +249,18 @@ export default function MovieDetail() {
             </span>
           </div>
         </div>
+      </Container>
 
-        {recommendations.length > 0 && (
-          <MovieSection
-            title="More like this"
-            movies={recommendations}
-            isLoading={isLoading}
-            getImageUrl={getImageUrl}
-            categoryPath="recommendations"
-            onSeeMore={() => fetchCategory("recommendations", 1)}
-          />
-        )}
-      </main>
+      {recommendations.length > 0 && (
+        <MovieSection
+          title="More like this"
+          movies={recommendations}
+          isLoading={isLoading}
+          getImageUrl={getImageUrl}
+          categoryPath="recommendations"
+          onSeeMore={() => fetchCategory("recommendations", 1)}
+        />
+      )}
 
       {playingMovieId && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm">
@@ -258,7 +271,7 @@ export default function MovieDetail() {
             ×
           </button>
 
-          <div className="w-full max-w-6xl p-4">
+          <div className="w-full max-w-6xl px-20">
             <VidkingPlayer tmdbId={playingMovieId} type="movie" />
           </div>
         </div>

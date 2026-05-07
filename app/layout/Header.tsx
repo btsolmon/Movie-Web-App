@@ -5,6 +5,7 @@ import Link from "next/link";
 import { GenreSelector } from "@/app/layout/GenreSelector";
 import { Input } from "@/app/layout/Input";
 import { useState, useEffect, useRef } from "react";
+import { Container } from "@/app/components/Container";
 
 export const Header = () => {
   const { theme, setTheme } = useTheme();
@@ -47,7 +48,7 @@ export const Header = () => {
 
   return (
     <header className="py-[11.5px] relative z-50">
-      <div className="px-20">
+      <Container>
         <div className="flex justify-between items-center">
           <Link
             href={"/"}
@@ -69,7 +70,7 @@ export const Header = () => {
           </div>
           <div>{renderThemeChanger()}</div>
         </div>
-      </div>
+      </Container>
     </header>
   );
 };

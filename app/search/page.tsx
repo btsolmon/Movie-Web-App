@@ -6,6 +6,7 @@ import { tmdb } from "@/lib/tmdb";
 import { Movie } from "@/types";
 import MovieCard from "@/app/components/MovieCard";
 import { Pagination } from "@/app/components/Pagination";
+import { Container } from "@/app/components/Container";
 
 const getImageUrl = (path: string | null, size: string = "w500") => {
   return path
@@ -98,7 +99,7 @@ function SearchContent() {
   };
 
   return (
-    <main className="max-w-[1200px] mx-auto pt-10 px-6 min-h-screen text-black dark:text-white">
+    <Container>
       <h1 className="text-3xl font-bold mb-2">Search results</h1>
 
       <div className="grid grid-cols-12 gap-10 pt-3">
@@ -191,13 +192,13 @@ function SearchContent() {
           </div>
         </div>
       </div>
-    </main>
+    </Container>
   );
 }
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="max-w-[1200px] mx-auto pt-10 px-6 min-h-screen text-black dark:text-white">Loading...</div>}>
+    <Suspense fallback={<div className="w-full mx-auto pt-10 px-20 min-h-screen text-black dark:text-white">Loading...</div>}>
       <SearchContent />
     </Suspense>
   );

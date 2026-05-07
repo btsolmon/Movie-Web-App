@@ -1,41 +1,46 @@
 import React from "react";
 import { Skeleton } from "@/app/components/Skeleton";
+import { Container } from "./Container";
 
 const MovieDetailSkeleton = () => {
   return (
     <div className="min-h-screen text-black">
-      <main className="max-w-[1200px] mx-auto pt-10 px-6">
-        <div className="flex justify-between items-end mb-8">
-          <div className="space-y-3">
-            <Skeleton width={300} height={40} className="rounded-lg" />
-            <div className="flex gap-2">
-              <Skeleton width={40} height={16} />
-              <Skeleton width={30} height={16} />
-              <Skeleton width={60} height={16} />
+      <Container>
+        <main className="pt-10">
+          <div className="flex justify-between items-end mb-8">
+            <div className="space-y-3">
+              <Skeleton width={300} height={40} className="rounded-lg" />
+              <div className="flex gap-2">
+                <Skeleton width={40} height={16} />
+                <Skeleton width={30} height={16} />
+                <Skeleton width={60} height={16} />
+              </div>
             </div>
-          </div>
 
-          <div className="flex flex-col items-end gap-2">
-            <Skeleton width={40} height={12} />
-            <div className="flex gap-2 items-center">
-              <Skeleton width={32} height={32} className="rounded-full" />
-              <div className="space-y-1">
-                <Skeleton width={50} height={20} />
-                <Skeleton width={30} height={10} />
+            <div className="flex flex-col items-end gap-2">
+              <Skeleton width={40} height={12} />
+              <div className="flex gap-2 items-center">
+                <Skeleton width={32} height={32} className="rounded-full" />
+                <div className="space-y-1">
+                  <Skeleton width={50} height={20} />
+                  <Skeleton width={30} height={10} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-12 gap-5 mb-10 h-[500px]">
-          <div className="col-span-4">
-            <Skeleton height="100%" className="rounded-sm" />
+          <div className="grid grid-cols-12 gap-5 mb-10 h-[500px] mt-10">
+            <div className="col-span-4">
+              <Skeleton height="100%" className="rounded-sm" />
+            </div>
+            <div className="col-span-8">
+              <Skeleton height="100%" className="rounded-sm" />
+            </div>
           </div>
-          <div className="col-span-8">
-            <Skeleton height="100%" className="rounded-sm" />
-          </div>
-        </div>
+        </main>
+      </Container>
 
+      <Container>
         <div className="space-y-6">
           <div className="flex gap-2">
             <Skeleton width={80} height={32} className="rounded-full" />
@@ -48,8 +53,10 @@ const MovieDetailSkeleton = () => {
             <Skeleton width="70%" height={20} />
           </div>
         </div>
+      </Container>
 
-        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6 mb-8 mt-6">
+      <Container>
+        <div className="space-y-5 border-b border-gray-200 dark:border-gray-600 py-6">
           {[1, 2, 3].map((i) => (
             <div key={i}>
               <div className="grid grid-cols-[100px_1fr] items-center">
@@ -62,7 +69,9 @@ const MovieDetailSkeleton = () => {
             </div>
           ))}
         </div>
+      </Container>
 
+      <Container>
         <div className="mt-10">
           <Skeleton width={150} height={24} className="mb-4" />
           <div className="grid grid-cols-5 gap-4">
@@ -74,7 +83,7 @@ const MovieDetailSkeleton = () => {
             ))}
           </div>
         </div>
-      </main>
+      </Container>
     </div>
   );
 };
