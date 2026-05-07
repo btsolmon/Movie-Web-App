@@ -1,0 +1,24 @@
+$ next build
+▲ Next.js 16.2.3 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1897ms
+  Running TypeScript ...
+  Finished TypeScript in 1271ms ...
+  Collecting page data using 7 workers ...
+  Generating static pages using 7 workers (0/6) ...
+⨯ useSearchParams() should be wrapped in a suspense boundary at page "/genres". Read more: https://nextjs.org/docs/messages/missing-suspense-with-csr-bailout
+    at S (/Users/26bs11043/Desktop/movie-web-app/.next/server/chunks/ssr/node_modules_next_0w2y7fz._.js:2:2692)
+    at r (/Users/26bs11043/Desktop/movie-web-app/.next/server/chunks/ssr/node_modules_next_0w2y7fz._.js:4:6760)
+    at h (/Users/26bs11043/Desktop/movie-web-app/.next/server/chunks/ssr/[root-of-the-server]__0af06uu._.js:1:5177)
+    at an (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:84267)
+    at ai (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:86086)
+    at al (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:107860)
+    at ao (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:105275)
+    at am (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:112789)
+    at au (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:109892)
+    at al (/Users/26bs11043/Desktop/movie-web-app/node_modules/next/dist/compiled/next-server/app-page-turbo.runtime.prod.js:2:108138)
+Error occurred prerendering page "/genres". Read more: https://nextjs.org/docs/messages/prerender-error
+Export encountered an error on /genres/page: /genres, exiting the build.
+⨯ Next.js build worker exited with code: 1 and signal: null
+error: script "build" exited with code 1

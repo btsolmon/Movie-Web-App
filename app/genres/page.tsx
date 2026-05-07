@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { tmdb } from "@/lib/tmdb";
@@ -137,7 +138,7 @@ function GenresContent() {
 
 export default function GenresPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="max-w-[1200px] mx-auto py-10 px-6 min-h-screen">Loading...</div>}>
       <GenresContent />
     </Suspense>
   );

@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "next-themes";
 import { Header } from "./layout/Header";
 import { Footer } from "./layout/Footer";
+import { Suspense } from "react";
 
 const inter = Inter({
   variable: "--font-inter-sans",
@@ -28,7 +29,9 @@ export default function RootLayout({
           defaultTheme="light"
           attribute="class"
         >
-          <Header />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Header />
+          </Suspense>
           {children}
           <Footer />
         </ThemeProvider>

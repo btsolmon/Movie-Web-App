@@ -1,4 +1,5 @@
 "use client";
+
 import { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { tmdb } from "@/lib/tmdb";
@@ -196,7 +197,7 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<div className="max-w-[1200px] mx-auto pt-10 px-6 min-h-screen text-black dark:text-white">Loading...</div>}>
       <SearchContent />
     </Suspense>
   );
