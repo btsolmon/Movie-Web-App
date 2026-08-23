@@ -94,11 +94,11 @@ function SearchContent() {
   };
 
   return (
-    <Container>
-      <h1 className="text-3xl font-bold mb-2">Search results</h1>
+    <Container className="py-6 md:py-10 min-h-screen">
+      <h1 className="text-2xl md:text-3xl font-bold mb-2">Search results</h1>
 
-      <div className="grid grid-cols-12 gap-10 pt-3">
-        <div className="col-span-12 lg:col-span-9">
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-6 lg:gap-10 pt-3">
+        <div className="order-2 lg:order-1 lg:col-span-9">
           {isLoading ? (
             <div className="py-20 text-center">Loading...</div>
           ) : (
@@ -112,7 +112,7 @@ function SearchContent() {
 
               {results.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                     {results.map((movie) => (
                       <MovieCard
                         key={movie.id}
@@ -138,9 +138,9 @@ function SearchContent() {
           )}
         </div>
 
-        <div className="hidden lg:block lg:col-span-3">
-          <h3 className="text-2xl font-bold mb-1">Search by genre</h3>
-          <p className="text-lg text-gray-500 mb-5">
+        <div className="order-1 lg:order-2 lg:col-span-3">
+          <h3 className="text-xl md:text-2xl font-bold mb-1">Search by genre</h3>
+          <p className="text-sm md:text-lg text-gray-500 mb-4 md:mb-5">
             See lists of movies by genre
           </p>
           <div className="flex flex-wrap gap-2">
@@ -173,7 +173,7 @@ export default function SearchPage() {
   return (
     <Suspense
       fallback={
-        <div className="w-full mx-auto pt-10 px-20 min-h-screen">
+        <div className="w-full mx-auto pt-10 px-4 min-h-screen">
           Loading...
         </div>
       }

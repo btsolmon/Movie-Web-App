@@ -49,10 +49,10 @@ function RecommendationsContent() {
   if (!id) return <div className="py-20 text-center">ID not found.</div>;
 
   return (
-    <div className="py-16 min-h-screen text-black dark:text-white">
+    <div className="py-8 md:py-16 min-h-screen text-black dark:text-white">
       <Container>
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-3xl">More Like This</h2>
+        <div className="flex justify-between items-center mb-6 md:mb-10">
+          <h2 className="text-2xl md:text-3xl">More Like This</h2>
           <button
             onClick={() => router.back()}
             className="font-semibold hover:underline"
@@ -66,7 +66,7 @@ function RecommendationsContent() {
             Loading...
           </div>
         ) : (
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
             {movies.slice(0,10).map((movie) => (
               <MovieCard
                 key={movie.id}

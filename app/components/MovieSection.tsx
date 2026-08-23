@@ -14,7 +14,7 @@ interface MovieSectionProps {
 }
 
 const MovieGridSkeleton = () => (
-  <div className="grid grid-cols-5 gap-8">
+  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
     {[...Array(10)].map((_, i) => (
       <div key={i} className="animate-pulse">
         <div className="aspect-[2/3] bg-gray-200 rounded-2xl mb-4" />
@@ -35,10 +35,10 @@ const MovieSection = ({
   seeMoreHref,
 }: MovieSectionProps) => {
   return (
-    <section className="py-16 text-black dark:text-white">
+    <section className="py-8 md:py-16 text-black dark:text-white">
       <Container>
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-2xl font-semibold uppercase">{title}</h2>
+        <div className="flex justify-between items-center mb-6 md:mb-10">
+          <h2 className="text-lg md:text-2xl font-semibold uppercase">{title}</h2>
           {seeMoreHref ? (
             <Link
               href={seeMoreHref}
@@ -62,7 +62,7 @@ const MovieSection = ({
         {isLoading ? (
           <MovieGridSkeleton />
         ) : (
-          <div className="grid grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
             {movies.slice(0, 10).map((movie) => (
               <MovieCard
                 key={movie.id}

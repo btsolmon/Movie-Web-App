@@ -95,10 +95,10 @@ if (!movie && !isLoading) {
 
   if (viewCategory) {
     return (
-      <div className="w-full flex flex-col min-h-screen">
+      <div className="w-full flex flex-col min-h-screen py-6 md:py-10">
         <Container>
           <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold capitalize">More like this</h2>
+            <h2 className="text-xl md:text-3xl font-bold capitalize">More like this</h2>
             <button
               onClick={() => setViewCategory(null)}
               className=" gap-2 text-sm font-semibold hover:underline cursor-pointer"
@@ -107,7 +107,7 @@ if (!movie && !isLoading) {
             </button>
           </div>
 
-          <div className="grid grid-cols-5 gap-8">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-8">
             {categoryMovies.map((movie) => (
               <MovieCard
                 key={movie.id}
@@ -143,9 +143,11 @@ if (!movie && !isLoading) {
     <div className=" min-h-screen text-black">
       <Container>
         <main className="pt-10 text-black dark:text-white">
-          <div className="flex justify-between items-end mb-8">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6 md:mb-8">
             <div>
-              <h1 className="text-4xl font-semibold mb-2 ">{movie.title}</h1>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-semibold mb-2">
+                {movie.title}
+              </h1>
               <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
                 <span>{movie.release_date?.split("-")[0]}</span>
                 <span>•</span>
@@ -156,7 +158,7 @@ if (!movie && !isLoading) {
                 </span>
               </div>
             </div>
-            <div className="flex flex-col items-end">
+            <div className="flex flex-col items-start sm:items-end">
               <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">
                 Rating
               </span>
@@ -179,15 +181,15 @@ if (!movie && !isLoading) {
             </div>
           </div>
 
-          <div className="grid grid-cols-12 gap-5 mb-10 h-[500px] mt-10">
-            <div className="col-span-4 rounded-sm overflow-hidden shadow-2xl">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5 mb-8 md:mb-10 h-auto md:h-[500px] mt-6 md:mt-10">
+            <div className="md:col-span-4 rounded-sm overflow-hidden shadow-2xl max-h-[420px] md:max-h-none mx-auto w-full max-w-[280px] md:max-w-none">
               <img
                 src={getImageUrl(movie.poster_path, "w780")}
                 className="w-full h-full object-cover"
                 alt={movie.title}
               />
             </div>
-            <div className="col-span-8 relative rounded-sm overflow-hidden group shadow-lg">
+            <div className="md:col-span-8 relative rounded-sm overflow-hidden group shadow-lg aspect-video md:aspect-auto md:h-full">
               <img
                 src={getImageUrl(movie.backdrop_path, "original")}
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
@@ -197,7 +199,7 @@ if (!movie && !isLoading) {
 
               <button
                 onClick={() => setPlayingMovieId(movie.id)}
-                className="absolute bottom-8 left-8 flex items-center gap-3 /10 hover:/20 backdrop-blur-md text-white px-5 py-3 rounded-full border border-white/20 transition-all active:scale-95"
+                className="absolute bottom-4 left-4 sm:bottom-8 sm:left-8 flex items-center gap-3 backdrop-blur-md text-white px-4 py-2 sm:px-5 sm:py-3 rounded-full border border-white/20 transition-all active:scale-95"
               >
                 <div className="w-10 h-10  rounded-full flex items-center justify-center shadow-lg">
                   <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
@@ -221,7 +223,7 @@ if (!movie && !isLoading) {
               </span>
             ))}
           </div>
-          <p className="text-lg leading-relaxed text-gray-800 dark:text-white max-w-4xl">
+          <p className="text-base md:text-lg leading-relaxed text-gray-800 dark:text-white max-w-4xl">
             {movie.overview}
           </p>
         </div>
@@ -266,12 +268,12 @@ if (!movie && !isLoading) {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm">
           <button
             onClick={() => setPlayingMovieId(null)}
-            className="absolute top-8 right-10 text-white text-5xl hover:text-red-500 transition-colors z-[110]"
+            className="absolute top-4 right-4 sm:top-8 sm:right-10 text-white text-4xl sm:text-5xl hover:text-red-500 transition-colors z-[110]"
           >
             ×
           </button>
 
-          <div className="w-full max-w-6xl px-20">
+          <div className="w-full max-w-6xl px-4 sm:px-8 md:px-20">
             <VidkingPlayer tmdbId={playingMovieId} type="movie" />
           </div>
         </div>

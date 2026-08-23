@@ -20,7 +20,7 @@ const PaginationItem = ({
       data-active={active}
       disabled={disabled}
       onClick={onClick}
-      className="data-[active='true']:border-[#E4E4E7] min-w-10 min-h-10 rounded-md border border-transparent flex justify-center items-center gap-2 p-2.5 cursor-pointer disabled:opacity-30"
+      className="data-[active='true']:border-[#E4E4E7] min-w-8 min-h-8 sm:min-w-10 sm:min-h-10 rounded-md border border-transparent flex justify-center items-center gap-2 p-2 sm:p-2.5 cursor-pointer disabled:opacity-30 text-sm"
     >
       {children}
     </button>
@@ -73,7 +73,7 @@ export const Pagination = ({
   };
 
   return (
-    <div className="flex justify-end gap-1 my-10">
+    <div className="flex flex-wrap justify-center md:justify-end gap-1 my-6 md:my-10">
       <PaginationItem disabled={currentPage === 1} onClick={handlePrev}>
         <svg
           width="16"
@@ -89,7 +89,7 @@ export const Pagination = ({
             strokeLinejoin="round"
           />
         </svg>
-        Previous
+        <span className="hidden sm:inline">Previous</span>
       </PaginationItem>
       {currentPage > 2 && (
         <PaginationItem onClick={() => onPageChange(1)}>1</PaginationItem>
@@ -128,7 +128,7 @@ export const Pagination = ({
         onClick={handleNext}
         disabled={currentPage === totalPages}
       >
-        Next
+        <span className="hidden sm:inline">Next</span>
         <svg
           width="16"
           height="16"

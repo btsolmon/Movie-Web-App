@@ -71,13 +71,13 @@ function GenresContent() {
     .join(", ");
 
   return (
-    <Container>
-      <h1 className="text-3xl font-bold mb-8">Search filter</h1>
+    <Container className="py-6 md:py-10 min-h-screen">
+      <h1 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8">Search filter</h1>
 
-      <div className="flex flex-col lg:flex-row gap-10">
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-10">
         <div className="w-full lg:w-64 flex-shrink-0">
-          <h2 className="text-2xl font-bold mb-1">Genres</h2>
-          <p className="text-lg text-gray-500 mb-5">
+          <h2 className="text-xl md:text-2xl font-bold mb-1">Genres</h2>
+          <p className="text-sm md:text-lg text-gray-500 mb-4 md:mb-5">
             See lists of movies by genre
           </p>
           <div className="flex flex-wrap gap-2">
@@ -115,7 +115,7 @@ function GenresContent() {
             <div className="text-center py-20">Loading...</div>
           ) : (
             <>
-              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
                 {movies.map((movie) => (
                   <MovieCard
                     key={movie.id}
@@ -143,7 +143,7 @@ export default function GenresPage() {
   return (
     <Suspense
       fallback={
-        <div className="w-full mx-auto py-10 px-20 min-h-screen">
+        <div className="w-full mx-auto py-10 px-4 min-h-screen">
           Loading...
         </div>
       }

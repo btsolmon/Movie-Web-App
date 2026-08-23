@@ -24,11 +24,11 @@ export default function Home() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const HeroSkeleton = () => (
-    <div className="w-full h-[800px] flex items-center">
+    <div className="w-full h-[420px] sm:h-[600px] lg:h-[800px] flex items-center">
       <Container>
-        <div className="relative z-10 flex flex-col gap-4">
-          <div className="h-7 w-32 bg-gray-300 rounded animate-pulse" />
-          <div className="h-[72px] w-full max-w-2xl bg-gray-300 rounded animate-pulse" />
+        <div className="relative z-10 flex flex-col gap-3 md:gap-4">
+          <div className="h-5 md:h-7 w-24 md:w-32 bg-gray-300 rounded animate-pulse" />
+          <div className="h-10 md:h-[72px] w-full max-w-2xl bg-gray-300 rounded animate-pulse" />
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-gray-300 rounded-full animate-pulse" />
             <div className="h-7 w-20 bg-gray-300 rounded animate-pulse" />
@@ -129,7 +129,7 @@ export default function Home() {
           <div
             ref={scrollContainerRef}
             onScroll={handleScroll}
-            className="w-full h-[800px] flex overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar"
+            className="w-full h-[420px] sm:h-[600px] lg:h-[800px] flex overflow-x-auto scroll-smooth snap-x snap-mandatory no-scrollbar"
           >
             {trendingMovies.map((movie) => (
               <div
@@ -141,21 +141,21 @@ export default function Home() {
               >
                 <div className="absolute inset-0 bg-black/40" />
                 <Container>
-                  <div className="relative z-10 flex flex-col gap-4">
-                    <p className="text-lg font-medium">Now Playing:</p>
-                    <h1 className="text-6xl font-extrabold uppercase">
+                  <div className="relative z-10 flex flex-col gap-3 md:gap-4">
+                    <p className="text-sm md:text-lg font-medium">Now Playing:</p>
+                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold uppercase break-words line-clamp-3">
                       {movie.title}
                     </h1>
-                    <div className="flex items-center gap-2 text-xl font-bold">
-                      <img src="/star.svg" alt="star" className="w-6 h-6" />
+                    <div className="flex items-center gap-2 text-base md:text-xl font-bold">
+                      <img src="/star.svg" alt="star" className="w-5 h-5 md:w-6 md:h-6" />
                       <span>{movie.vote_average.toFixed(1)}/10</span>
                     </div>
-                    <p className="text-base text-gray-200 max-w-lg line-clamp-3">
+                    <p className="text-sm md:text-base text-gray-200 max-w-lg line-clamp-3">
                       {movie.overview}
                     </p>
                     <button
                       onClick={() => setPlayingMovieId(movie.id)}
-                      className="w-[145px] flex items-center gap-3 bg-gray-200 text-black px-3 py-2 rounded-md hover:scale-110 transition-transform"
+                      className="w-[145px] flex items-center gap-3 bg-gray-200 text-black px-3 py-2 rounded-md hover:scale-105 md:hover:scale-110 transition-transform"
                     >
                       <div className="border-l-[12px] border-l-black border-y-[8px] border-y-transparent ml-1" />
                       <span>Watch Now</span>
@@ -166,7 +166,7 @@ export default function Home() {
             ))}
           </div>
 
-          <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-50 flex gap-3 items-center">
+          <div className="absolute bottom-4 sm:bottom-10 left-1/2 -translate-x-1/2 z-50 flex gap-2 sm:gap-3 items-center">
             {trendingMovies.map((_, index) => (
               <button
                 key={index}
@@ -182,10 +182,10 @@ export default function Home() {
           </div>
           <button
             onClick={handleNext}
-            className="absolute right-10 top-1/2 -translate-y-1/2 z-20 hover:scale-110 transition-transform active:scale-95"
+            className="absolute right-3 sm:right-10 top-1/2 -translate-y-1/2 z-20 hover:scale-110 transition-transform active:scale-95"
           >
-            <div className="/20 p-4 rounded-full backdrop-blur-sm border border-white/10">
-              <img src="/chevron-right.svg" alt="next" className="w-10 h-10" />
+            <div className="p-2 sm:p-4 rounded-full backdrop-blur-sm border border-white/10 bg-black/20">
+              <img src="/chevron-right.svg" alt="next" className="w-6 h-6 sm:w-10 sm:h-10" />
             </div>
           </button>
         </div>
@@ -219,12 +219,12 @@ export default function Home() {
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm">
           <button
             onClick={() => setPlayingMovieId(null)}
-            className="absolute top-8 right-10 text-white text-5xl hover:text-red-500 transition-colors z-[110]"
+            className="absolute top-4 right-4 sm:top-8 sm:right-10 text-white text-4xl sm:text-5xl hover:text-red-500 transition-colors z-[110]"
           >
             ×
           </button>
 
-          <div className="w-full max-w-6xl px-20">
+          <div className="w-full max-w-6xl px-4 sm:px-8 md:px-20">
             <VidkingPlayer tmdbId={playingMovieId} type="movie" />
           </div>
         </div>

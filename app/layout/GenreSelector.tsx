@@ -43,7 +43,7 @@ export const GenreSelector = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setIsVisible(!isVisible)}
-        className="flex gap-2 items-center text-sm text-[#181818] px-4 h-9 border border-[#E4E4E7] dark:border-gray-600 rounded-[10px] shadow-xs cursor-pointer hover:opacity-80 dark:text-white"
+        className="flex gap-2 items-center text-sm text-[#181818] px-3 md:px-4 h-9 shrink-0 border border-[#E4E4E7] dark:border-gray-600 rounded-[10px] shadow-xs cursor-pointer hover:opacity-80 dark:text-white"
       >
         <svg
           className={`transition-transform duration-200 ${isVisible ? "rotate-180" : ""}`}
@@ -64,13 +64,13 @@ export const GenreSelector = () => {
 
       <div
         data-shown={isVisible}
-        className={`text-black dark:text-white bg-white dark:bg-black absolute left-0 z-50 duration-300 p-5 border border-[#E4E4E7] dark:border-gray-600 rounded-lg mt-1 data-[shown=true]:visible data-[shown=true]:opacity-100 invisible opacity-0 shadow-xl w-[577px]`}
+        className={`text-black dark:text-white bg-white dark:bg-black absolute left-0 z-50 duration-300 p-4 md:p-5 border border-[#E4E4E7] dark:border-gray-600 rounded-lg mt-1 data-[shown=true]:visible data-[shown=true]:opacity-100 invisible opacity-0 shadow-xl w-[min(577px,calc(100vw-2rem))]`}
       >
-        <div className="mt-1 font-semibold text-2xl">Genres</div>
+        <div className="mt-1 font-semibold text-xl md:text-2xl">Genres</div>
         <div className="text-sm opacity-70">See lists of movies by genre</div>
         <hr className="border-[#E4E4E7] dark:border-gray-600 my-4" />
 
-        <div className="flex flex-wrap gap-4 max-w-[540px] min-w-[300px]">
+        <div className="flex flex-wrap gap-2 md:gap-4 max-w-[540px]">
           {genres.map((genre) => {
             const isActive = activeGenres.includes(genre.id.toString());
             return (

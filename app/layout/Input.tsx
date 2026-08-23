@@ -64,8 +64,8 @@ export const Input = () => {
   };
 
   return (
-    <div className="relative flex-1 " ref={searchRef}>
-      <div className="flex items-center w-[379px] h-9 gap-2 border rounded-lg border-gray-300 dark:border-gray-600 px-3 bg-gray-50 dark:bg-black focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
+    <div className="relative flex-1 min-w-0" ref={searchRef}>
+      <div className="flex items-center w-full md:w-[379px] h-9 gap-2 border rounded-lg border-gray-300 dark:border-gray-600 px-3 bg-gray-50 dark:bg-black focus-within:ring-2 focus-within:ring-indigo-100 transition-all">
         <img
           className="w-4 h-4 opacity-50 dark:invert"
           src="/magnifying-glass.svg"
@@ -86,7 +86,7 @@ export const Input = () => {
       </div>
 
       {isVisible && debouncedSearch && !isLoading && (
-        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 border border-gray-200 dark:border-gray-600 shadow-2xl rounded-lg overflow-hidden z-[60] bg-white dark:bg-black w-[95vw] max-w-[577px]">
+        <div className="absolute top-full left-0 right-0 md:left-1/2 md:right-auto md:-translate-x-1/2 mt-2 border border-gray-200 dark:border-gray-600 shadow-2xl rounded-lg overflow-x-hidden overflow-y-auto z-[60] bg-white dark:bg-black w-full md:w-[95vw] max-w-[577px] max-h-[70vh]">
           {movies?.length > 0 ? (
             <>
               {movies.map((movie) => (

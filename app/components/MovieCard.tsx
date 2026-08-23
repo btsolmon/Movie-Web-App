@@ -23,15 +23,19 @@ const MovieCard = ({ movie, getImageUrl }: MovieCardProps) => {
         <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
       </div>
 
-      <div className="mt-4 px-1">
-        <div className="flex items-center gap-2 mb-1">
-          <img src="/star.svg" alt="star" className="w-4 h-4" />
-          <span className="text-sm font-medium">
+      <div className="mt-2 md:mt-4 px-1">
+        <div className="flex items-center gap-1 md:gap-2 mb-1">
+          <img src="/star.svg" alt="star" className="w-3.5 h-3.5 md:w-4 md:h-4" />
+          <span className="text-xs md:text-sm font-medium">
             {movie.vote_average.toFixed(1)}
-            <span className="text-sm text-gray-500 font-normal">/10</span>
+            <span className="text-xs md:text-sm text-gray-500 font-normal">
+              /10
+            </span>
           </span>
         </div>
-        <h3 className="font-semibold text-lg line-clamp-1">{movie.title}</h3>
+        <h3 className="font-semibold text-sm md:text-lg line-clamp-1">
+          {movie.title}
+        </h3>
       </div>
     </Link>
   );
